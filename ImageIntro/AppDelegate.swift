@@ -79,3 +79,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+
+/*
+ 
+ Тестовое изменение для проверки
+ 
+ */
