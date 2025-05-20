@@ -1,10 +1,3 @@
-//
-//  ViewController.swift
-//  ImageIntro
-//
-//  Created by Никита Пономарев on 06.04.2025.
-//
-
 import UIKit
 
 class ImagesListViewController: UIViewController {
@@ -22,7 +15,7 @@ class ImagesListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+
         tableView.rowHeight = 200
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
     }
@@ -64,7 +57,9 @@ extension ImagesListViewController {
 
 // MARK: - UITableViewDelegate
 extension ImagesListViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) { }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // TODO:
+    }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let image = UIImage(named: photosName[indexPath.row]) else {
