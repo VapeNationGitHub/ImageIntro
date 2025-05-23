@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Xal-IQ-MWp">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="JDk-uJ-eGS">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -106,13 +106,14 @@
                         <viewLayoutGuide key="safeArea" id="nLU-hg-IVa"/>
                         <color key="backgroundColor" red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
+                    <navigationItem key="navigationItem" id="CeC-Zk-XV2"/>
                     <connections>
                         <outlet property="imageView" destination="lYW-C9-kjE" id="h3q-85-Y2U"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5qo-HV-qiT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="32.824427480916029" y="-1022.5352112676056"/>
+            <point key="canvasLocation" x="1703" y="-332"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="bDo-nq-jni">
@@ -205,6 +206,7 @@
                                             <outlet property="cellImage" destination="gED-j8-2ye" id="beo-Ix-HOg"/>
                                             <outlet property="dateLabel" destination="Mpu-ZK-QIF" id="oeG-sF-Yrf"/>
                                             <outlet property="likeButton" destination="TCg-2X-ap9" id="mba-F0-Uvs"/>
+                                            <segue destination="Xal-IQ-MWp" kind="show" id="LtU-ru-Rdj"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -230,7 +232,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="959.5419847328244" y="-332.3943661971831"/>
+            <point key="canvasLocation" x="892" y="-332"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="WAJ-f5-Bfn">
