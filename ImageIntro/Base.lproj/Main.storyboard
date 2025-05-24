@@ -115,10 +115,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rcD-pQ-eZH">
-                                <rect key="frame" x="-20" y="-20" width="433" height="892"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="lYW-C9-kjE">
-                                        <rect key="frame" x="20" y="20" width="393" height="852"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
                                 </subviews>
@@ -149,7 +149,7 @@
                             <constraint firstItem="rcD-pQ-eZH" firstAttribute="leading" secondItem="nLU-hg-IVa" secondAttribute="leading" id="TXs-2Z-Oym"/>
                             <constraint firstItem="as0-vf-nfh" firstAttribute="top" secondItem="nLU-hg-IVa" secondAttribute="top" constant="8" id="VKm-lH-o07"/>
                             <constraint firstItem="as0-vf-nfh" firstAttribute="leading" secondItem="nLU-hg-IVa" secondAttribute="leading" constant="8" id="f5W-Zk-QJ3"/>
-                            <constraint firstItem="nLU-hg-IVa" firstAttribute="bottom" secondItem="rcD-pQ-eZH" secondAttribute="bottom" id="gti-l4-oSz"/>
+                            <constraint firstAttribute="bottom" secondItem="rcD-pQ-eZH" secondAttribute="bottom" id="gti-l4-oSz"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="CeC-Zk-XV2"/>
