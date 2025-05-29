@@ -8,33 +8,33 @@ final class ProfileViewController: UIViewController {
         let imageView = UIImageView(image: UIImage(named: "PhotoProfile"))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 35
-        imageView.clipsToBounds   = true
+        imageView.clipsToBounds = true
         return imageView
     }()
     
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.text          = "Екатерина Новикова"
-        label.font          = UIFont.boldSystemFont(ofSize: 23)
-        label.textColor     = .white
+        label.text = "Екатерина Новикова"
+        label.font = UIFont.boldSystemFont(ofSize: 23)
+        label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let loginNameLabel: UILabel = {
         let label = UILabel()
-        label.text          = "@ekaterina_nov"
-        label.font          = UIFont.systemFont(ofSize: 13)
-        label.textColor     = UIColor(white: 1, alpha: 0.6)
+        label.text = "@ekaterina_nov"
+        label.font = UIFont.systemFont(ofSize: 13)
+        label.textColor = UIColor(white: 1, alpha: 0.6)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let messageLabel: UILabel = {
         let label = UILabel()
-        label.text          = "Hello, world!"
-        label.font          = UIFont.systemFont(ofSize: 13)
-        label.textColor     = .white
+        label.text = "Hello, world!"
+        label.font = UIFont.systemFont(ofSize: 13)
+        label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -61,7 +61,7 @@ private extension ProfileViewController {
     
     // 1. Цвет фона и доп. настройки
     func configureAppearance() {
-        view.backgroundColor = UIColor(red: 0.102, green: 0.106, blue: 0.133, alpha: 1) // #1A1B22
+        view.backgroundColor = UIColor(named: "YP_BlackColor")
         exitButton.addTarget(self, action: #selector(didTapLogout), for: .touchUpInside)
     }
     
@@ -93,8 +93,8 @@ private extension ProfileViewController {
             // Кнопка выхода
             exitButton.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor),
             exitButton.trailingAnchor.constraint(equalTo: safe.trailingAnchor, constant: -24),
-            exitButton.widthAnchor.constraint(equalToConstant: 24),
-            exitButton.heightAnchor.constraint(equalTo: exitButton.widthAnchor),
+            exitButton.widthAnchor.constraint(equalToConstant: 44),
+            exitButton.heightAnchor.constraint(equalToConstant: 44),
             
             // ФИО
             nameLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 8),
