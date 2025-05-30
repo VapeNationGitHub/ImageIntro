@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -276,12 +277,19 @@
                                     <action selector="didTapBackButton:" destination="1AT-kQ-c26" eventType="touchUpInside" id="wZG-Fk-bYZ"/>
                                 </connections>
                             </button>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Qmg-mQ-PRd">
+                                <rect key="frame" x="121" y="40" width="150" height="4"/>
+                                <color key="progressTintColor" name="YP_BlackColor"/>
+                            </progressView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="WAw-PC-vUe"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="Qmg-mQ-PRd" firstAttribute="top" secondItem="WAw-PC-vUe" secondAttribute="top" constant="40" id="0P5-UO-xuS"/>
                             <constraint firstItem="8hp-cu-GOS" firstAttribute="leading" secondItem="rNl-Vv-Vad" secondAttribute="leading" id="5w7-89-ZqZ"/>
                             <constraint firstAttribute="trailing" secondItem="8hp-cu-GOS" secondAttribute="trailing" id="78n-cw-Ine"/>
+                            <constraint firstItem="WAw-PC-vUe" firstAttribute="trailing" secondItem="Qmg-mQ-PRd" secondAttribute="trailing" constant="122" id="VL6-51-UxP"/>
+                            <constraint firstItem="Qmg-mQ-PRd" firstAttribute="leading" secondItem="WAw-PC-vUe" secondAttribute="leading" constant="121" id="Vmc-cH-P0z"/>
                             <constraint firstItem="gRO-C6-LGn" firstAttribute="top" secondItem="WAw-PC-vUe" secondAttribute="top" id="WDa-bg-y0T"/>
                             <constraint firstItem="gRO-C6-LGn" firstAttribute="leading" secondItem="WAw-PC-vUe" secondAttribute="leading" id="wSe-1Q-ZSP"/>
                             <constraint firstAttribute="bottom" secondItem="8hp-cu-GOS" secondAttribute="bottom" id="zZL-nb-Uxh"/>
@@ -290,6 +298,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="P7G-qO-EXP"/>
                     <connections>
+                        <outlet property="progressView" destination="Qmg-mQ-PRd" id="GQf-eE-nRb"/>
                         <outlet property="webView" destination="8hp-cu-GOS" id="9BM-Xk-fLv"/>
                     </connections>
                 </viewController>
@@ -347,6 +356,9 @@
         <image name="nav_back_button" width="9" height="16"/>
         <image name="tab_editorial_active" width="30" height="30"/>
         <image name="tab_profile_active" width="30" height="30"/>
+        <namedColor name="YP_BlackColor">
+            <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
