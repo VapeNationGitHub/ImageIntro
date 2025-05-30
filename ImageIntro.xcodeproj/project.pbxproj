@@ -30,7 +30,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		0233A8092DA2CC9400969CAE /* Exceptions for "ImageIntro" folder in "ImageIntro" target */ = {
+		025D30272DE9DD6F0088AF8F /* Exceptions for "ImageIntro" folder in "ImageIntro" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -43,7 +43,7 @@
 		0233A7E02DA2CC9200969CAE /* ImageIntro */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				0233A8092DA2CC9400969CAE /* Exceptions for "ImageIntro" folder in "ImageIntro" target */,
+				025D30272DE9DD6F0088AF8F /* Exceptions for "ImageIntro" folder in "ImageIntro" target */,
 			);
 			path = ImageIntro;
 			sourceTree = "<group>";
