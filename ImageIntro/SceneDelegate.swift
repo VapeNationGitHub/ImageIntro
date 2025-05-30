@@ -1,10 +1,3 @@
-//
-//  SceneDelegate.swift
-//  ImageIntro
-//
-//  Created by Никита Пономарев on 06.04.2025.
-//
-
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
