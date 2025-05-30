@@ -5,12 +5,19 @@ enum WebViewConstants {
     static let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
 }
 
+protocol WebViewViewControllerDelegate: AnyObject {
+    func webViewViewControllerDidFinish(_ vc: WebViewViewController, didAuthenticateWithCode code: String)
+    func webViewViewControllerDidCancel(_ vc: WebViewViewController)
+}
+
 final class WebViewViewController: UIViewController {
     
     @IBOutlet private var webView: WKWebView!
     @IBAction func didTapBackButton(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
+    
+    weak var delegate: WebViewViewControllerDelegate?
     
     // MARK: - viewDidLoad
     override func viewDidLoad() {
@@ -45,7 +52,7 @@ final class WebViewViewController: UIViewController {
 extension WebViewViewController: WKNavigationDelegate {
     func webView(
         _ webView: WKWebView,
-        didStartProvisionalNavigation navigation: WKNavigation,
+        decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
         if let code = code(from: navigationAction) {
