@@ -30,10 +30,10 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		025D30272DE9DD6F0088AF8F /* Exceptions for "ImageIntro" folder in "ImageIntro" target */ = {
+		023C38942DEC3A8E00786562 /* Exceptions for "ImageIntro" folder in "ImageIntro" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				App/Info.plist,
 			);
 			target = 0233A7DD2DA2CC9200969CAE /* ImageIntro */;
 		};
@@ -43,7 +43,7 @@
 		0233A7E02DA2CC9200969CAE /* ImageIntro */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				025D30272DE9DD6F0088AF8F /* Exceptions for "ImageIntro" folder in "ImageIntro" target */,
+				023C38942DEC3A8E00786562 /* Exceptions for "ImageIntro" folder in "ImageIntro" target */,
 			);
 			path = ImageIntro;
 			sourceTree = "<group>";
@@ -291,7 +291,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = CQZJDP4SC7;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ImageIntro/Info.plist;
+				INFOPLIST_FILE = ImageIntro/App/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -324,7 +324,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = CQZJDP4SC7;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ImageIntro/Info.plist;
+				INFOPLIST_FILE = ImageIntro/App/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
