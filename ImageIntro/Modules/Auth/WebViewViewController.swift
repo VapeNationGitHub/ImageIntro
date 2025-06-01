@@ -6,7 +6,7 @@ enum WebViewConstants {
 }
 
 protocol WebViewViewControllerDelegate: AnyObject {
-    func webViewViewControllerDidFinish(_ vc: WebViewViewController, didAuthenticateWithCode code: String)
+    func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String)
     func webViewViewControllerDidCancel(_ vc: WebViewViewController)
 }
 

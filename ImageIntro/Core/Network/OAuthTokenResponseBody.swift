@@ -1,7 +1,9 @@
-//
-//  OAuthTokenResponseBody.swift
-//  ImageIntro
-//
-//  Created by Никита Пономарев on 01.06.2025.
-//
+import Foundation
 
+struct OAuthTokenResponseBody: Decodable {
+    let accessToken: String
+
+    private enum CodingKeys: String, CodingKey {
+        case accessToken = "access_token"
+    }
+}
