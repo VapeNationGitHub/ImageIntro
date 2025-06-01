@@ -198,7 +198,7 @@
         <!--Auth View Controller Scene-->
         <scene sceneID="LS6-Lr-qeo">
             <objects>
-                <viewController title="Auth View Controller Scene" id="NgB-5V-MyM" customClass="AutViewController" customModule="ImageIntro" sceneMemberID="viewController">
+                <viewController title="Auth View Controller Scene" id="NgB-5V-MyM" customClass="AuthViewController" customModule="ImageIntro" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="m2X-Kk-wVg">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -331,7 +331,7 @@
         <!--Splash View Controller-->
         <scene sceneID="4aU-yb-cp1">
             <objects>
-                <viewController title="Splash View Controller" id="p6o-HB-its" customClass="AuthViewController" customModule="ImageIntro" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Splash View Controller" id="p6o-HB-its" customClass="SplashViewController" customModule="ImageIntro" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="T43-NM-R83">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

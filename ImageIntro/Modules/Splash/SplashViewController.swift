@@ -8,11 +8,20 @@ final class SplashViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if let _ = oauth2TokenStorage.token {
+        if let token = oauth2TokenStorage.token {
             switchToTabBarController()
         } else {
             performSegue(withIdentifier: showAuthSegueIdentifier, sender: nil)
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setNeedsStatusBarAppearanceUpdate()
+    }
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .lightContent
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
