@@ -29,22 +29,9 @@
 		0233A8012DA2CC9400969CAE /* ImageIntroUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImageIntroUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		023C38942DEC3A8E00786562 /* Exceptions for "ImageIntro" folder in "ImageIntro" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				App/Info.plist,
-			);
-			target = 0233A7DD2DA2CC9200969CAE /* ImageIntro */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		0233A7E02DA2CC9200969CAE /* ImageIntro */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				023C38942DEC3A8E00786562 /* Exceptions for "ImageIntro" folder in "ImageIntro" target */,
-			);
 			path = ImageIntro;
 			sourceTree = "<group>";
 		};
