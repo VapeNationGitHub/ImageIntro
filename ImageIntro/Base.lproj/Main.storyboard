@@ -106,7 +106,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="33" y="-332"/>
+            <point key="canvasLocation" x="-973" y="-204"/>
         </scene>
         <!--Single Image View Controller-->
         <scene sceneID="zS5-CR-Idp">
@@ -176,7 +176,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5qo-HV-qiT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="762.59541984732823" y="-332.3943661971831"/>
+            <point key="canvasLocation" x="-126" y="-204"/>
         </scene>
         <!--Profile View Controller-->
         <scene sceneID="kV1-qa-exD">
@@ -193,7 +193,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Ir-7S-aHJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="959.5419847328244" y="394.36619718309862"/>
+            <point key="canvasLocation" x="-973" y="453"/>
         </scene>
         <!--Auth View Controller Scene-->
         <scene sceneID="LS6-Lr-qeo">
@@ -228,7 +228,8 @@
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <segue destination="1AT-kQ-c26" kind="presentation" identifier="" modalPresentationStyle="overFullScreen" modalTransitionStyle="coverVertical" id="u1M-Cn-QpJ"/>
+                                    <action selector="didTapLoginButton:" destination="NgB-5V-MyM" eventType="touchUpInside" id="ddi-gE-I8u"/>
+                                    <segue destination="1AT-kQ-c26" kind="presentation" identifier="ShowWebViewSegue" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical" id="u1M-Cn-QpJ"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -247,7 +248,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bgE-5i-UHi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1593" y="1008"/>
+            <point key="canvasLocation" x="33" y="1140"/>
         </scene>
         <!--Web View Controller Scene-->
         <scene sceneID="Quh-v2-iMs">
@@ -304,12 +305,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="po5-wg-uz5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-721" y="1008"/>
+            <point key="canvasLocation" x="1033" y="1139"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="bDo-nq-jni">
             <objects>
-                <tabBarController id="JDk-uJ-eGS" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarViewController" id="JDk-uJ-eGS" customClass="TabBarController" customModule="ImageIntro" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="EF0-vd-Asf">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -326,12 +327,12 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zW1-Ii-ttd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1592" y="-77"/>
+            <point key="canvasLocation" x="-1979" y="273"/>
         </scene>
         <!--Splash View Controller-->
         <scene sceneID="4aU-yb-cp1">
             <objects>
-                <viewController title="Splash View Controller" id="p6o-HB-its" customClass="SplashViewController" customModule="ImageIntro" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SplashViewController" title="Splash View Controller" id="p6o-HB-its" customClass="SplashViewController" customModule="ImageIntro" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="T43-NM-R83">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -348,12 +349,12 @@
                         </constraints>
                     </view>
                     <connections>
-                        <segue destination="33A-tL-iy0" kind="presentation" identifier="ShowAuthenticationScreen" modalPresentationStyle="fullScreen" id="dRT-4F-MgT"/>
+                        <segue destination="33A-tL-iy0" kind="presentation" identifier="ShowAuthenticationScreen" modalPresentationStyle="fullScreen" id="gi8-jl-UZg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ubp-FV-KM0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3892" y="1008"/>
+            <point key="canvasLocation" x="-1979" y="1139"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="yOi-ZH-equ">
@@ -371,7 +372,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="byr-gk-x0i" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2520" y="1008"/>
+            <point key="canvasLocation" x="-972" y="1139"/>
         </scene>
     </scenes>
     <resources>
