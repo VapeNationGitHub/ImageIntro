@@ -11,9 +11,10 @@ final class OAuth2Service {
     func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
         guard task == nil else { return }
 
-        var request = makeOAuthTokenRequest(code: code)
-        guard let request = request else {
-            completion(.failure(NetworkError.invalidRequest))
+        guard let request = makeOAuthTokenRequest(code: code) else {
+            DispatchQueue.main.async {
+                completion(.failure(NetworkError.invalidRequest))
+            }
             return
         }
 

@@ -14,13 +14,14 @@ extension URLSession {
                 if 200..<300 ~= response.statusCode {
                     fulfill(.success(data))
                 } else {
-                    print("🚨 HTTP Status Code: \(response.statusCode)")
+                    print("❌ Неверный HTTP статус-код: \(response.statusCode)")
                     fulfill(.failure(NetworkError.httpStatusCode(response.statusCode)))
                 }
             } else if let error = error {
-                print("🚨 URL Request Error: \(error)")
+                print("❌ Сетевая ошибка запроса: \(error.localizedDescription)")
                 fulfill(.failure(NetworkError.urlRequestError(error)))
             } else {
+                print("❌ Неизвестная ошибка URLSession")
                 fulfill(.failure(NetworkError.urlSessionError))
             }
         }

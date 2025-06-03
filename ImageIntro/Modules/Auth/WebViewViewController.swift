@@ -26,7 +26,10 @@ final class WebViewViewController: UIViewController {
             URLQueryItem(name: "response_type", value: "code"),
             URLQueryItem(name: "scope", value: Constants.AccessScope)
         ]
-        let url = urlComponents.url!
+        guard let url = urlComponents.url else {
+            print("❌ Не удалось создать URL из компонентов")
+            return
+        }
 
         let request = URLRequest(url: url)
         webView.load(request)
