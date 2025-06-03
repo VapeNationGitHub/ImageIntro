@@ -181,7 +181,7 @@
         <!--Profile View Controller-->
         <scene sceneID="kV1-qa-exD">
             <objects>
-                <viewController storyboardIdentifier="ProfileViewController" id="p5E-fo-OCJ" customClass="ProfileViewController" customModule="ImageIntro" sceneMemberID="viewController">
+                <viewController id="p5E-fo-OCJ" customClass="ProfileViewController" customModule="ImageIntro" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Z82-1b-GC6">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -195,10 +195,32 @@
             </objects>
             <point key="canvasLocation" x="959.5419847328244" y="394.36619718309862"/>
         </scene>
-        <!--Auth View Controller Scene-->
+        <!--Tab Bar Controller-->
+        <scene sceneID="bDo-nq-jni">
+            <objects>
+                <tabBarController storyboardIdentifier="TabBarViewController" id="JDk-uJ-eGS" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="EF0-vd-Asf">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="0.0" colorSpace="calibratedRGB"/>
+                        <color key="selectedImageTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <tabBarAppearance key="standardAppearance">
+                            <color key="backgroundColor" red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="0.84705882352941175" colorSpace="calibratedRGB"/>
+                        </tabBarAppearance>
+                    </tabBar>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="Sha-ja-kpP"/>
+                        <segue destination="p5E-fo-OCJ" kind="relationship" relationship="viewControllers" id="iHo-kJ-gza"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zW1-Ii-ttd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1592" y="-77"/>
+        </scene>
+        <!--Auth View Controller-->
         <scene sceneID="LS6-Lr-qeo">
             <objects>
-                <viewController title="Auth View Controller Scene" id="NgB-5V-MyM" customClass="AuthViewController" customModule="ImageIntro" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="NgB-5V-MyM" customClass="AuthViewController" customModule="ImageIntro" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="m2X-Kk-wVg">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -228,7 +250,7 @@
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <segue destination="1AT-kQ-c26" kind="presentation" identifier="" modalPresentationStyle="overFullScreen" modalTransitionStyle="coverVertical" id="u1M-Cn-QpJ"/>
+                                    <segue destination="1AT-kQ-c26" kind="presentation" identifier="ShowWebView" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical" id="u1M-Cn-QpJ"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -249,10 +271,10 @@
             </objects>
             <point key="canvasLocation" x="-1593" y="1008"/>
         </scene>
-        <!--Web View Controller Scene-->
+        <!--Web View View Controller-->
         <scene sceneID="Quh-v2-iMs">
             <objects>
-                <viewController title="Web View Controller Scene" id="1AT-kQ-c26" customClass="WebViewViewController" customModule="ImageIntro" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="1AT-kQ-c26" customClass="WebViewViewController" customModule="ImageIntro" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="rNl-Vv-Vad">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -306,32 +328,28 @@
             </objects>
             <point key="canvasLocation" x="-721" y="1008"/>
         </scene>
-        <!--Tab Bar Controller-->
-        <scene sceneID="bDo-nq-jni">
+        <!--Navigation Controller-->
+        <scene sceneID="yOi-ZH-equ">
             <objects>
-                <tabBarController id="JDk-uJ-eGS" sceneMemberID="viewController">
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="EF0-vd-Asf">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="33A-tL-iy0" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="9jg-V1-rcJ">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="0.0" colorSpace="calibratedRGB"/>
-                        <color key="selectedImageTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <tabBarAppearance key="standardAppearance">
-                            <color key="backgroundColor" red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="0.84705882352941175" colorSpace="calibratedRGB"/>
-                        </tabBarAppearance>
-                    </tabBar>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="Sha-ja-kpP"/>
-                        <segue destination="p5E-fo-OCJ" kind="relationship" relationship="viewControllers" id="iHo-kJ-gza"/>
+                        <segue destination="NgB-5V-MyM" kind="relationship" relationship="rootViewController" id="SZB-y7-fpf"/>
                     </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="zW1-Ii-ttd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="byr-gk-x0i" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1592" y="-77"/>
+            <point key="canvasLocation" x="-2520" y="1008"/>
         </scene>
         <!--Splash View Controller-->
         <scene sceneID="4aU-yb-cp1">
             <objects>
-                <viewController title="Splash View Controller" id="p6o-HB-its" customClass="SplashViewController" customModule="ImageIntro" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="p6o-HB-its" customClass="SplashViewController" customModule="ImageIntro" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="T43-NM-R83">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -354,24 +372,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ubp-FV-KM0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-3892" y="1008"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="yOi-ZH-equ">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="33A-tL-iy0" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="9jg-V1-rcJ">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="NgB-5V-MyM" kind="relationship" relationship="rootViewController" id="SZB-y7-fpf"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="byr-gk-x0i" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2520" y="1008"/>
         </scene>
     </scenes>
     <resources>
