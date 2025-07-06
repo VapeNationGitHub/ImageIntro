@@ -8,26 +8,92 @@ enum NetworkError: Error {
     case urlSessionError
 }
 
+// MARK: - Ошибка авторизации
+enum AuthServiceError: Error {
+    case invalidRequest
+}
+
 final class OAuth2Service {
+    
     static let shared = OAuth2Service()
     private init() {}
     
     private let tokenStorage = OAuth2TokenStorage.shared
-    
     private var task: URLSessionTask?
+    private var lastCode: String?
     
     func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
-        guard task == nil else { return }
+        assert(Thread.isMainThread, "fetchOAuthToken должен вызываться из главного потока")
+        
+        // Защита от повторных запросов
+        if let task = task {
+            if lastCode == code {
+                print("Запрос уже выполняется с тками же code.")
+                completion(.failure(AuthServiceError.invalidRequest))
+                return
+            } else {
+                print("Отмена предыдущего запроса с другим code.")
+                task.cancel()
+            }
+        } else {
+            if lastCode == code {
+                print("Повторный запрос с таким же code.")
+                completion(.failure(AuthServiceError.invalidRequest))
+                return
+            }
+        }
+        
+        lastCode = code
         
         // Формируем запрос
         guard let request = makeOAuthTokenRequest(code: code) else {
+            print("Невозможно создать URLRequest")
+            completion(.failure(NetworkError.invalidRequest))
+            return
+            
+            /*
             DispatchQueue.main.async {
                 completion(.failure(NetworkError.invalidRequest))
             }
             return
+             */
         }
         
+        
+        
+        
+        
+        
+        
         // Отправляем запрос
+        
+        
+        task = URLSession.shared.data(for: request) {[weak self] result in
+            guard let self else { return}
+            self.task = nil
+            self.lastCode = nil
+            
+            switch result {
+                case .success(let data):
+                do {
+                    let decoder = JSONDecoder()
+                    let body = try decoder.decode(OAuthTokenResponseBody.self, from: data)
+                    let token = body.accessToken
+                    self.tokenStorage.token = token
+                    print("Токен получен и сохранен: \(token.prefix(10))...")
+                    completion(.success(token))
+                } catch {
+                    print("Ошибка декодирования токена: \(error)")
+                    completion(.failure(error))
+                }
+                
+            case .failure(let error):
+                print("Ошибка сетевого запроса \(error)")
+                completion(.failure(error))
+            }
+        }
+        
+        /*
         let session = URLSession.shared
         task = session.data(for: request) { [weak self] result in
             guard let self = self else { return }
@@ -54,6 +120,7 @@ final class OAuth2Service {
                 completion(.failure(error))
             }
         }
+         */
         task?.resume()
     }
     

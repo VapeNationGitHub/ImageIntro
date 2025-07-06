@@ -1,4 +1,5 @@
 import UIKit
+import ProgressHUD
 
 // MARK: - Протокол делегата AuthViewController
 protocol AuthViewControllerDelegate: AnyObject {
@@ -7,6 +8,7 @@ protocol AuthViewControllerDelegate: AnyObject {
 
 final class AuthViewController: UIViewController {
     private let ShowWebViewSegueIdentifier = "ShowWebView"
+    private let oauth2Service = OAuth2Service.shared
     
     weak var delegate: AuthViewControllerDelegate?
     
@@ -25,10 +27,36 @@ final class AuthViewController: UIViewController {
 // MARK: - Делегат WebViewViewController
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        delegate?.authViewController(self, didAuthenticateWithCode: code)
+        vc.dismiss(animated: true)
+        ProgressHUD.animate()
+        fetchOAuthToken(code) {[weak self] result in
+            ProgressHUD.dismiss()
+            guard let self = self else {return}
+            
+            switch result{
+            case .success:
+                self.delegate?.authViewController(self, didAuthenticateWithCode: code)
+            case .failure:
+                break
+            }
+        }
     }
     
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
         dismiss(animated: true)
     }
 }
+
+extension AuthViewController {
+    private func fetchOAuthToken(_ code: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        oauth2Service.fetchOAuthToken(code: code) { result in
+            switch result {
+            case .success:
+                completion(.success(())) // просто говорим "успех", ничего не возвращаем
+            case .failure(let error):
+                completion(.failure(error)) // прокидываем ошибку дальше
+            }
+        }
+    }
+}
+
