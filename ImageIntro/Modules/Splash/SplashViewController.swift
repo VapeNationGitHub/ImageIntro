@@ -24,16 +24,16 @@ final class SplashViewController: UIViewController {
             performSegue(withIdentifier: ShowAuthenticationScreenSegueIdentifier, sender: nil)
         }
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
     }
-
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
     }
-
+    
     // MARK: - Метод перехода к основному TabBar-интерфейсу
     private func switchToTabBarController() {
         guard let window = UIApplication.shared.windows.first else {
@@ -71,13 +71,13 @@ extension SplashViewController: AuthViewControllerDelegate {
             self.fetchOAuthToken(code)
         }
     }
-
+    
     // MARK: - Запрос токена по коду авторизации
     private func fetchOAuthToken(_ code: String) {
         UIBlockingProgressHUD.show() // ✅ Блокируем UI
         oauth2Service.fetchOAuthToken(code: code) { [weak self] result in
             guard let self = self else { return }
-
+            
             switch result {
             case .success(let token):
                 print("✅ Успешно получили токен. Загружаем профиль...")
@@ -88,21 +88,25 @@ extension SplashViewController: AuthViewControllerDelegate {
             }
         }
     }
-
+    
     // MARK: - Запрос профиля пользователя
     private func fetchProfile(_ token: String) {
-        UIBlockingProgressHUD.show() // ✅ Показываем индикатор
-        profileService.fetchProfile(token) { [weak self] result in
+        UIBlockingProgressHUD.show()
+        
+        ProfileService.shared.fetchProfile(token) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            
             guard let self = self else { return }
-            UIBlockingProgressHUD.dismiss() // ✅ Прячем индикатор
-
+            
             switch result {
-            case .success:
-                print("✅ Профиль успешно загружен. Переход к TabBar.")
+            case .success(let profile):
+                // Стартуем загрузку аватарки, но не ждём результата
+                ProfileImageService.shared.fetchProfileImageURL(username: profile.username) { _ in }
                 self.switchToTabBarController()
+                
             case .failure(let error):
-                print("❌ Ошибка загрузки профиля: \(error)")
-                // TODO: можно показать UIAlert с кнопкой «Повторить»
+                print("❌ Ошибка получения профиля: \(error)")
+                // TODO: Показать alert об ошибке
             }
         }
     }

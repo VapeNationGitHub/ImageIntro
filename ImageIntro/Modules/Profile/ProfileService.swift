@@ -13,8 +13,9 @@ final class ProfileService {
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         assert(Thread.isMainThread)
 
-        // ✅ Упростили проверку гонки
+        // Защита от повторных запросов с тем же токеном
         guard lastToken != token else {
+            print("[ProfileService]: Ошибка — повторный запрос уже выполняется с token: \(token.prefix(10))...")
             completion(.failure(ProfileServiceError.requestAlreadyInProgress))
             return
         }
@@ -23,48 +24,32 @@ final class ProfileService {
         lastToken = token
 
         guard let request = makeRequest(token: token) else {
+            print("[ProfileService]: Ошибка — невозможно сформировать URLRequest для token: \(token.prefix(10))...")
             completion(.failure(ProfileServiceError.invalidRequest))
             return
         }
 
-        let session = URLSession.shared
-        task = session.dataTask(with: request) { [weak self] data, response, error in
-            DispatchQueue.main.async {
-                guard let self else { return }
-                self.task = nil
-                self.lastToken = nil
+        task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
+            guard let self = self else { return }
+            self.task = nil
+            self.lastToken = nil
 
-                if let error = error {
-                    print("🚨 Ошибка при выполнении запроса профиля: \(error)")
-                    completion(.failure(error))
-                    return
-                }
+            switch result {
+            case .success(let profileResult):
+                let name = [profileResult.firstName, profileResult.lastName].compactMap { $0 }.joined(separator: " ")
+                let loginName = "@\(profileResult.username)"
+                let profile = Profile(
+                    username: profileResult.username,
+                    name: name,
+                    loginName: loginName,
+                    bio: profileResult.bio
+                )
+                self.profile = profile
+                completion(.success(profile))
 
-                guard let data else {
-                    print("🚨 Нет данных в ответе профиля")
-                    completion(.failure(ProfileServiceError.emptyResponse))
-                    return
-                }
-
-                do {
-                    let decoder = JSONDecoder()
-                    let profileResult = try decoder.decode(ProfileResult.self, from: data)
-
-                    let name = [profileResult.firstName, profileResult.lastName].compactMap { $0 }.joined(separator: " ")
-                    let loginName = "@\(profileResult.username)"
-                    let profile = Profile(
-                        username: profileResult.username,
-                        name: name,
-                        loginName: loginName,
-                        bio: profileResult.bio
-                    )
-
-                    self.profile = profile // ✅ Сохранили результат
-                    completion(.success(profile))
-                } catch {
-                    print("🚨 Ошибка декодирования профиля: \(error)")
-                    completion(.failure(error))
-                }
+            case .failure(let error):
+                print("[ProfileService]: Ошибка при получении профиля — \(error.localizedDescription)")
+                completion(.failure(error))
             }
         }
 
@@ -74,7 +59,7 @@ final class ProfileService {
     // MARK: - Вспомогательный метод создания авторизованного GET-запроса
     private func makeRequest(token: String) -> URLRequest? {
         guard let url = URL(string: "https://api.unsplash.com/me") else {
-            print("🚨 Неверный URL для запроса профиля")
+            print("[ProfileService]: Ошибка — некорректный URL при создании запроса")
             return nil
         }
 

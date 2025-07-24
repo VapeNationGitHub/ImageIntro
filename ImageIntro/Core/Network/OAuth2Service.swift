@@ -6,6 +6,7 @@ enum NetworkError: Error {
     case httpStatusCode(Int)
     case urlRequestError(Error)
     case urlSessionError
+    case decodingError(Error)
 }
 
 // MARK: - Ошибка авторизации
@@ -24,103 +25,48 @@ final class OAuth2Service {
     
     func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread, "fetchOAuthToken должен вызываться из главного потока")
-        
-        // Защита от повторных запросов
+
         if let task = task {
             if lastCode == code {
-                print("Запрос уже выполняется с тками же code.")
+                print("[OAuth2Service]: Повторный запрос с тем же кодом — задача уже выполняется")
                 completion(.failure(AuthServiceError.invalidRequest))
                 return
             } else {
-                print("Отмена предыдущего запроса с другим code.")
+                print("[OAuth2Service]: Отмена предыдущего запроса с другим кодом")
                 task.cancel()
             }
-        } else {
-            if lastCode == code {
-                print("Повторный запрос с таким же code.")
-                completion(.failure(AuthServiceError.invalidRequest))
-                return
-            }
+        } else if lastCode == code {
+            print("[OAuth2Service]: Повторный запрос с тем же кодом")
+            completion(.failure(AuthServiceError.invalidRequest))
+            return
         }
-        
+
         lastCode = code
-        
-        // Формируем запрос
+
         guard let request = makeOAuthTokenRequest(code: code) else {
-            print("Невозможно создать URLRequest")
+            print("[OAuth2Service]: Ошибка — не удалось создать URLRequest")
             completion(.failure(NetworkError.invalidRequest))
             return
-            
-            /*
-            DispatchQueue.main.async {
-                completion(.failure(NetworkError.invalidRequest))
-            }
-            return
-             */
         }
-        
-        
-        
-        
-        
-        
-        
-        // Отправляем запрос
-        
-        
-        task = URLSession.shared.data(for: request) {[weak self] result in
-            guard let self else { return}
-            self.task = nil
-            self.lastCode = nil
-            
-            switch result {
-                case .success(let data):
-                do {
-                    let decoder = JSONDecoder()
-                    let body = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                    let token = body.accessToken
-                    self.tokenStorage.token = token
-                    print("Токен получен и сохранен: \(token.prefix(10))...")
-                    completion(.success(token))
-                } catch {
-                    print("Ошибка декодирования токена: \(error)")
-                    completion(.failure(error))
-                }
-                
-            case .failure(let error):
-                print("Ошибка сетевого запроса \(error)")
-                completion(.failure(error))
-            }
-        }
-        
-        /*
-        let session = URLSession.shared
-        task = session.data(for: request) { [weak self] result in
+
+        task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
             guard let self = self else { return }
             self.task = nil
-            
+            self.lastCode = nil
+
             switch result {
-            case .success(let data):
-                do {
-                    // Декодируем JSON-ответ
-                    let decoder = JSONDecoder()
-                    let body = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                    let token = body.accessToken
-                    
-                    // Сохраняем и возвращаем токен
-                    self.tokenStorage.token = token
-                    completion(.success(token))
-                } catch {
-                    print("🚨 Ошибка декодирования: \(error)")
-                    completion(.failure(error))
-                }
-                
+            case .success(let body):
+                let token = body.accessToken
+                self.tokenStorage.token = token
+                print("[OAuth2Service]: ✅ Токен успешно получен: \(token.prefix(10))...")
+                completion(.success(token))
+
             case .failure(let error):
-                print("🚨 Ошибка при выполнении запроса токена: \(error)")
+                print("[OAuth2Service]: ❌ Ошибка получения токена — \(error)")
                 completion(.failure(error))
             }
         }
-         */
+
         task?.resume()
     }
     

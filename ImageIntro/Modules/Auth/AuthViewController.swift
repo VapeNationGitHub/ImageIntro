@@ -16,7 +16,9 @@ final class AuthViewController: UIViewController {
         if segue.identifier == ShowWebViewSegueIdentifier {
             guard
                 let webViewViewController = segue.destination as? WebViewViewController
-            else { fatalError("Failed to prepare for \(ShowWebViewSegueIdentifier)") }
+            else {
+                fatalError("Failed to prepare for \(ShowWebViewSegueIdentifier)")
+            }
             webViewViewController.delegate = self
         } else {
             super.prepare(for: segue, sender: sender)
@@ -29,15 +31,16 @@ extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
         vc.dismiss(animated: true)
         ProgressHUD.animate()
-        fetchOAuthToken(code) {[weak self] result in
+        
+        fetchOAuthToken(code) { [weak self] result in
+            guard let self = self else { return }
             ProgressHUD.dismiss()
-            guard let self = self else {return}
             
-            switch result{
+            switch result {
             case .success:
                 self.delegate?.authViewController(self, didAuthenticateWithCode: code)
             case .failure:
-                break
+                self.showAuthErrorAlert()
             }
         }
     }
@@ -47,16 +50,26 @@ extension AuthViewController: WebViewViewControllerDelegate {
     }
 }
 
+// MARK: - Работа с OAuth
 extension AuthViewController {
     private func fetchOAuthToken(_ code: String, completion: @escaping (Result<Void, Error>) -> Void) {
         oauth2Service.fetchOAuthToken(code: code) { result in
             switch result {
             case .success:
-                completion(.success(())) // просто говорим "успех", ничего не возвращаем
+                completion(.success(()))
             case .failure(let error):
-                completion(.failure(error)) // прокидываем ошибку дальше
+                completion(.failure(error))
             }
         }
     }
+    
+    private func showAuthErrorAlert() {
+        let alert = UIAlertController(
+            title: "Что-то пошло не так",
+            message: "Не удалось войти в систему",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "Ок", style: .default))
+        present(alert, animated: true)
+    }
 }
-
