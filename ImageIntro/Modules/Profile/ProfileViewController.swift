@@ -1,4 +1,5 @@
 import UIKit
+import Kingfisher
 
 // MARK: - Контроллер профиля пользователя
 final class ProfileViewController: UIViewController {
@@ -80,10 +81,12 @@ final class ProfileViewController: UIViewController {
             let profileImageURL = ProfileImageService.shared.avatarURL,
             let url = URL(string: profileImageURL)
         else { return }
-        // TODO [Sprint 11] Обновить аватар, используя Kingfisher
         
+        profileImageView.kf.setImage(
+            with: url,
+            placeholder: UIImage(named: "PhotoProfile")
+        )
     }
-    
     
     
     // MARK: - Обновление UI из профиля
