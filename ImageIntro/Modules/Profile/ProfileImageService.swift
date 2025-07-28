@@ -79,7 +79,7 @@ final class ProfileImageService {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         
-        if let token = OAuth2TokenStorage.shared.token {
+        if let token = KeychainTokenStorage.shared.token {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         } else {
             print("[ProfileImageService]: Ошибка — отсутствует токен при получении аватарки")

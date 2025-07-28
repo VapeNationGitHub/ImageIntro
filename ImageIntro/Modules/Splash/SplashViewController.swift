@@ -8,7 +8,7 @@ final class SplashViewController: UIViewController {
     // MARK: - Приватные свойства
     private let ShowAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
     private let oauth2Service = OAuth2Service.shared
-    private let oauth2TokenStorage = OAuth2TokenStorage.shared
+    private let oauth2TokenStorage = KeychainTokenStorage.shared
     private let profileService = ProfileService.shared // ✅ Добавили ссылку на ProfileService
     
     // MARK: - Жизненный цикл
@@ -16,7 +16,7 @@ final class SplashViewController: UIViewController {
         super.viewDidAppear(animated)
         print("✅ SplashViewController загружен")
         
-        if let token = oauth2TokenStorage.token {
+        if let token = KeychainTokenStorage.shared.token {
             print("🔐 Токен найден. Загружаем профиль...")
             fetchProfile(token) // ✅ Заменили switchToTabBarController() на fetchProfile(token)
         } else {
