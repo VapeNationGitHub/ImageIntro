@@ -23,7 +23,7 @@ final class SplashViewController: UIViewController {
         view.backgroundColor = .ypBlack // если используешь тему
         setupLayout()
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         print("✅ SplashViewController загружен")
@@ -36,7 +36,7 @@ final class SplashViewController: UIViewController {
             showAuthFlow()
         }
     }
-
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
     }
@@ -57,21 +57,21 @@ final class SplashViewController: UIViewController {
             assertionFailure("Не удалось загрузить AuthViewController")
             return
         }
-
+        
         authViewController.delegate = self
         authViewController.modalPresentationStyle = .fullScreen
         present(authViewController, animated: true)
     }
-
+    
     private func switchToTabBarController() {
         print("🌀 Переход на TabBarController")
         guard let window = UIApplication.shared.windows.first else {
             fatalError("Invalid Configuration")
         }
-
+        
         let tabBarController = UIStoryboard(name: "Main", bundle: .main)
             .instantiateViewController(withIdentifier: "TabBarController")
-
+        
         window.rootViewController = tabBarController
     }
 }
@@ -84,12 +84,12 @@ extension SplashViewController: AuthViewControllerDelegate {
             self.fetchOAuthToken(code)
         }
     }
-
+    
     private func fetchOAuthToken(_ code: String) {
         UIBlockingProgressHUD.show()
         oauth2Service.fetchOAuthToken(code: code) { [weak self] result in
             guard let self = self else { return }
-
+            
             switch result {
             case .success(let token):
                 print("✅ Успешно получили токен. Загружаем профиль...")
@@ -100,21 +100,21 @@ extension SplashViewController: AuthViewControllerDelegate {
             }
         }
     }
-
+    
     private func fetchProfile(_ token: String) {
         UIBlockingProgressHUD.show()
         profileService.fetchProfile(token) { [weak self] result in
             UIBlockingProgressHUD.dismiss()
             guard let self = self else { return }
-
+            
             print("👀 fetchProfile начал работу")
-
+            
             switch result {
             case .success(let profile):
                 print("🎉 Успешно получили профиль: \(profile.username)")
                 ProfileImageService.shared.fetchProfileImageURL(username: profile.username) { _ in }
                 self.switchToTabBarController()
-
+                
             case .failure(let error):
                 print("❌ Ошибка получения профиля: \(error)")
                 // Можно добавить alert здесь

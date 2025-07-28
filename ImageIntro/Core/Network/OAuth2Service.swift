@@ -25,7 +25,7 @@ final class OAuth2Service {
     
     func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread, "fetchOAuthToken должен вызываться из главного потока")
-
+        
         if let task = task {
             if lastCode == code {
                 print("[OAuth2Service]: Повторный запрос с тем же кодом — задача уже выполняется")
@@ -40,33 +40,33 @@ final class OAuth2Service {
             completion(.failure(AuthServiceError.invalidRequest))
             return
         }
-
+        
         lastCode = code
-
+        
         guard let request = makeOAuthTokenRequest(code: code) else {
             print("[OAuth2Service]: Ошибка — не удалось создать URLRequest")
             completion(.failure(NetworkError.invalidRequest))
             return
         }
-
+        
         task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
             guard let self = self else { return }
             self.task = nil
             self.lastCode = nil
-
+            
             switch result {
             case .success(let body):
                 let token = body.accessToken
                 self.tokenStorage.token = token
                 print("[OAuth2Service]: ✅ Токен успешно получен: \(token.prefix(10))...")
                 completion(.success(token))
-
+                
             case .failure(let error):
                 print("[OAuth2Service]: ❌ Ошибка получения токена — \(error)")
                 completion(.failure(error))
             }
         }
-
+        
         task?.resume()
     }
     

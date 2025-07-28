@@ -4,13 +4,12 @@ import SwiftKeychainWrapper
 final class KeychainTokenStorage {
     static let shared = KeychainTokenStorage()
     private init() {}
-
+    
     private let tokenKey = "bearerToken"
-
+    
     var token: String? {
         get {
             let token = KeychainWrapper.standard.string(forKey: tokenKey)
-            // KeychainWrapper.standard.string(forKey: tokenKey)
             print("🧪 [Keychain] Проверка токена: \(token?.prefix(10) ?? "nil")")
             return token
         }

@@ -10,7 +10,7 @@ extension URLSession {
                     completion(result)
                 }
             }
-
+            
             if let data = data,
                let response = response as? HTTPURLResponse {
                 if 200..<300 ~= response.statusCode {
@@ -29,7 +29,7 @@ extension URLSession {
         }
         return task
     }
-
+    
     // MARK: - Декодирование объекта из ответа (Generic)
     func objectTask<T: Decodable>(
         for request: URLRequest,
@@ -47,7 +47,7 @@ extension URLSession {
                     print("[objectTask]: Ошибка декодирования — \(error.localizedDescription), данные: \(String(data: data, encoding: .utf8) ?? "nil")")
                     completion(.failure(NetworkError.decodingError(error)))
                 }
-
+                
             case .failure(let error):
                 print("[objectTask]: Ошибка получения данных — \(error)")
                 completion(.failure(error))
