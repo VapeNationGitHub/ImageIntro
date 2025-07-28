@@ -178,23 +178,6 @@
             </objects>
             <point key="canvasLocation" x="762.59541984732823" y="-332.3943661971831"/>
         </scene>
-        <!--Profile View Controller-->
-        <scene sceneID="kV1-qa-exD">
-            <objects>
-                <viewController storyboardIdentifier="ProfileViewController" id="p5E-fo-OCJ" customClass="ProfileViewController" customModule="ImageIntro" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Z82-1b-GC6">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="dTL-ez-Pzx"/>
-                        <color key="backgroundColor" red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="" image="tab_profile_active" id="Mai-uM-yMl"/>
-                    <navigationItem key="navigationItem" id="BsK-h1-VXh"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4Ir-7S-aHJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="959.5419847328244" y="394.36619718309862"/>
-        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="bDo-nq-jni">
             <objects>
@@ -379,7 +362,6 @@
         <image name="nav_back_button" width="9" height="16"/>
         <image name="splash_screen_logo" width="72.666664123535156" height="75.333335876464844"/>
         <image name="tab_editorial_active" width="30" height="30"/>
-        <image name="tab_profile_active" width="30" height="30"/>
         <namedColor name="YP_BlackColor">
             <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
