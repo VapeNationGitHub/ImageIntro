@@ -36,11 +36,12 @@ final class SplashViewController: UIViewController {
     
     // MARK: - Метод перехода к основному TabBar-интерфейсу
     private func switchToTabBarController() {
+        print("🌀 Переход на TabBarController")
         guard let window = UIApplication.shared.windows.first else {
             fatalError("Invalid Configuration")
         }
         let tabBarController = UIStoryboard(name: "Main", bundle: .main)
-            .instantiateViewController(withIdentifier: "TabBarViewController")
+            .instantiateViewController(withIdentifier: "TabBarController")
         window.rootViewController = tabBarController
     }
 }
@@ -98,8 +99,11 @@ extension SplashViewController: AuthViewControllerDelegate {
             
             guard let self = self else { return }
             
+            print("👀 fetchProfile начал работу")
+            
             switch result {
             case .success(let profile):
+                print("🎉 Успешно получили профиль: \(profile.username)")
                 // Стартуем загрузку аватарки, но не ждём результата
                 ProfileImageService.shared.fetchProfileImageURL(username: profile.username) { _ in }
                 self.switchToTabBarController()

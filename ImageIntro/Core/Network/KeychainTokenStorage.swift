@@ -9,12 +9,17 @@ final class KeychainTokenStorage {
 
     var token: String? {
         get {
-            KeychainWrapper.standard.string(forKey: tokenKey)
+            let token = KeychainWrapper.standard.string(forKey: tokenKey)
+            // KeychainWrapper.standard.string(forKey: tokenKey)
+            print("🧪 [Keychain] Проверка токена: \(token?.prefix(10) ?? "nil")")
+            return token
         }
         set {
             if let token = newValue {
+                print("💾 [Keychain] Сохраняем токен: \(token.prefix(10))...")
                 KeychainWrapper.standard.set(token, forKey: tokenKey)
             } else {
+                print("🧹 [Keychain] Удаляем токен")
                 KeychainWrapper.standard.removeObject(forKey: tokenKey)
             }
         }
