@@ -7,7 +7,7 @@ final class ProfileService {
     
     private var task: URLSessionTask?
     private var lastToken: String?
-    private(set) var profile: Profile? // ✅ Добавлено: сохраняем результат и делаем доступным только на чтение
+    private(set) var profile: Profile?
     
     // MARK: - Метод получения профиля пользователя
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
@@ -48,7 +48,7 @@ final class ProfileService {
                 completion(.success(profile))
                 
             case .failure(let error):
-                print("[ProfileService]: Ошибка при получении профиля — \(error.localizedDescription)")
+                print("[ProfileService][fetchProfile]: Ошибка — \(error.localizedDescription), token: \(token.prefix(10))...")
                 completion(.failure(error))
             }
         }

@@ -62,7 +62,7 @@ final class OAuth2Service {
                 completion(.success(token))
                 
             case .failure(let error):
-                print("[OAuth2Service]: ❌ Ошибка получения токена — \(error)")
+                print("[OAuth2Service][fetchOAuthToken]: Ошибка — \(error.localizedDescription), code: \(code)")
                 completion(.failure(error))
             }
         }

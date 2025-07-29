@@ -27,7 +27,10 @@ final class WebViewViewController: UIViewController {
         
         webView.navigationDelegate = self
         
-        var urlComponents = URLComponents(string: UnsplashAuthorizeURLString)!
+        guard var urlComponents = URLComponents(string: UnsplashAuthorizeURLString) else {
+            return
+        }
+        
         urlComponents.queryItems = [
             URLQueryItem(name: "client_id", value: Constants.AccessKey),
             URLQueryItem(name: "redirect_uri", value: Constants.RedirectURI),

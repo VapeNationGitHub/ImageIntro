@@ -61,7 +61,7 @@ final class ProfileImageService {
                 )
                 
             case .failure(let error):
-                print("[ProfileImageService]: Ошибка при получении аватарки для \(username) — \(error)")
+                print("[ProfileImageService][fetchProfileImageURL]: Ошибка — \(error.localizedDescription), username: \(username)")
                 completion(.failure(error))
             }
         }
