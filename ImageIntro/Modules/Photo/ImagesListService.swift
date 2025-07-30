@@ -61,6 +61,11 @@ final class ImagesListService {
         task?.resume()
     }
     
+    func reset() {
+        photos = []
+        lastLoadedPage = nil
+    }
+    
     // MARK: - Преобразование JSON PhotoResult в модель Photo
     private func convertToPhoto(from result: PhotoResult) -> Photo {
         let size = CGSize(width: result.width, height: result.height)

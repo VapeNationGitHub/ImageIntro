@@ -56,6 +56,10 @@ final class ProfileService {
         task?.resume()
     }
     
+    func reset() {
+        profile = nil
+    }
+    
     // MARK: - Вспомогательный метод создания авторизованного GET-запроса
     private func makeRequest(token: String) -> URLRequest? {
         guard let url = URL(string: "https://api.unsplash.com/me") else {
@@ -69,6 +73,7 @@ final class ProfileService {
         return request
     }
 }
+
 
 // MARK: - Ошибки ProfileService
 enum ProfileServiceError: Error {

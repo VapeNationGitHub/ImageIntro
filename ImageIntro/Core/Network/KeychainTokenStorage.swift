@@ -23,5 +23,10 @@ final class KeychainTokenStorage {
             }
         }
     }
+    
+    func removeToken() {
+        token = nil
+    }
+
 }
 

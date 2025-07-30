@@ -108,7 +108,15 @@ private extension ProfileViewController {
     }
     
     @objc func didTapLogout() {
-        tabBarController?.selectedIndex = 0
+        // Очищаем данные
+        ProfileLogoutService.shared.logout()
+        
+        // Переход к экрану авторизации
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let sceneDelegate = windowScene.delegate as? SceneDelegate else { return }
+
+        let splashViewController = SplashViewController()
+        sceneDelegate.window?.rootViewController = splashViewController
     }
     
     func addSubviews() {
