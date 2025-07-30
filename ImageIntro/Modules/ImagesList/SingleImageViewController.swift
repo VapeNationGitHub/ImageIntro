@@ -8,24 +8,6 @@ final class SingleImageViewController: UIViewController {
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var scrollView: UIScrollView!
     
-    /*
-     override func viewDidLoad() {
-     super.viewDidLoad()
-     scrollView.minimumZoomScale = 0.1
-     scrollView.maximumZoomScale = 1.25
-     
-     guard let fullImageURL else { return }
-     
-     imageView.kf.indicatorType = .activity
-     imageView.kf.setImage(with: fullImageURL) { [weak self] result in
-     guard let self, let resultImage = try? result.get().image else { return }
-     imageView.frame.size = resultImage.size
-     scrollView.contentSize = resultImage.size
-     rescaleAndCenterImageInScrollView(image: resultImage)
-     }
-     }
-     */
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         scrollView.minimumZoomScale = 0.1
@@ -47,26 +29,6 @@ final class SingleImageViewController: UIViewController {
     // MARK: - Image loading
     private func reloadImage() {
         guard let fullImageURL else { return }
-        
-        
-        /*
-         UIBlockingProgressHUD.show()
-         
-         imageView.kf.setImage(with: fullImageURL) { [weak self] result in
-         guard let self else { return }
-         UIBlockingProgressHUD.dismiss()
-         
-         switch result {
-         case .success(let imageResult):
-         let image = imageResult.image
-         self.imageView.frame.size = image.size
-         self.scrollView.contentSize = image.size
-         self.rescaleAndCenterImageInScrollView(image: image)
-         case .failure:
-         self.showError()
-         }
-         }
-         */
         
         UIBlockingProgressHUD.show()
         

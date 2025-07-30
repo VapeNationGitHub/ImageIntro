@@ -36,17 +36,17 @@ final class ImagesListViewController: UIViewController {
         let oldCount = photos.count
         let newPhotos = ImagesListService.shared.photos
         let newCount = newPhotos.count
-
+        
         guard newCount > oldCount else { return }
-
+        
         let indexPaths = (oldCount..<newCount).map { IndexPath(row: $0, section: 0) }
         self.photos = newPhotos
-
+        
         tableView.performBatchUpdates {
             tableView.insertRows(at: indexPaths, with: .automatic)
         }
         print("updateTableViewAnimated, количество фотографий: \(photos.count)")
-
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -71,7 +71,7 @@ final class ImagesListViewController: UIViewController {
             ImagesListService.shared.fetchPhotosNextPage()
         }
     }
-
+    
 }
 
 // MARK: - UITableViewDataSource
@@ -81,6 +81,7 @@ extension ImagesListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath)
         
         guard let imageListCell = cell as? ImagesListCell else {
@@ -93,9 +94,19 @@ extension ImagesListViewController: UITableViewDataSource {
         
         imageListCell.dateLabel.text = formattedDate(photo.createdAt)
         
-        let placeholderImage = UIImage(named: "Stub") // Заглушка из Figma
-        imageListCell.cellImage.kf.indicatorType = .activity
-        imageListCell.cellImage.kf.setImage(with: URL(string: photo.thumbImageURL), placeholder: placeholderImage)
+        let placeholderImage = UIImage(named: "Stub")
+        
+        imageListCell.setImageState(.loading)
+        
+        let imageURL = URL(string: photo.thumbImageURL)
+        imageListCell.cellImage.kf.setImage(with: imageURL, placeholder: placeholderImage) { result in
+            switch result {
+            case .success(let imageResult):
+                imageListCell.setImageState(.finished(imageResult.image))
+            case .failure:
+                imageListCell.setImageState(.error)
+            }
+        }
         
         let likeImage = photo.isLiked
         ? UIImage(named: "like_button_on")
@@ -137,32 +148,32 @@ extension ImagesListViewController: ImagesListCellDelegate {
             print("❌ Не удалось получить indexPath для ячейки")
             return
         }
-
+        
         let photo = photos[indexPath.row]
         let isLike = !photo.isLiked
-
+        
         // Лог
         print("❤️ Пользователь \(isLike ? "ставит" : "снимает") лайк для фото \(photo.id)")
-
+        
         cell.setLikeButtonLoading(true)
-
+        
         ImagesListService.shared.changeLike(photoId: photo.id, isLike: isLike) { [weak self] result in
             DispatchQueue.main.async {
                 
                 guard let self else { return }
-
+                
                 switch result {
                 case .success:
-             
+                    
                     self.photos = ImagesListService.shared.photos
                     let updatedPhoto = self.photos[indexPath.row]
                     let likeImage = updatedPhoto.isLiked
-                        ? UIImage(named: "like_button_on")
-                        : UIImage(named: "like_button_off")
+                    ? UIImage(named: "like_button_on")
+                    : UIImage(named: "like_button_off")
                     cell.likeButton.setImage(likeImage, for: .normal)
                     
                     cell.setLikeButtonLoading(false)
-
+                    
                 case .failure(let error):
                     
                     cell.setLikeButtonLoading(false)

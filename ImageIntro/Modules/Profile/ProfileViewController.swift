@@ -74,6 +74,11 @@ final class ProfileViewController: UIViewController {
             print("⚠️ Профиль не найден в ProfileService")
         }
         
+        addSkeleton(to: profileImageView, cornerRadius: 35)
+        addSkeleton(to: nameLabel)
+        addSkeleton(to: loginNameLabel)
+        addSkeleton(to: messageLabel)
+        
     }
     
     private func updateAvatar() {
@@ -86,16 +91,54 @@ final class ProfileViewController: UIViewController {
             with: url,
             placeholder: UIImage(named: "PhotoProfile")
         )
+        self.removeSkeletons()
     }
     
     
     // MARK: - Обновление UI из профиля
-    
     private func updateProfileDetails(profile: Profile) {
         nameLabel.text = profile.name
         loginNameLabel.text = profile.loginName
         messageLabel.text = profile.bio
+        removeSkeletons()
     }
+    
+    // MARK: - Анимация в профиле
+    // Переменная для хранения градиентных слоёв
+    private var animationLayers = [CALayer]()
+    
+    // Метод для добавления градиента
+    private func addSkeleton(to view: UIView, cornerRadius: CGFloat = 0) {
+        let gradient = CAGradientLayer()
+        gradient.frame = view.bounds
+        gradient.cornerRadius = cornerRadius
+        gradient.masksToBounds = true
+        gradient.colors = [
+            UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1).cgColor,
+            UIColor(red: 0.531, green: 0.533, blue: 0.553, alpha: 1).cgColor,
+            UIColor(red: 0.431, green: 0.433, blue: 0.453, alpha: 1).cgColor
+        ]
+        gradient.startPoint = CGPoint(x: 0, y: 0.5)
+        gradient.endPoint = CGPoint(x: 1, y: 0.5)
+        gradient.locations = [0, 0.1, 0.3]
+        
+        let animation = CABasicAnimation(keyPath: "locations")
+        animation.fromValue = [0, 0.1, 0.3]
+        animation.toValue = [0, 0.8, 1]
+        animation.duration = 1.0
+        animation.repeatCount = .infinity
+        gradient.add(animation, forKey: "skeleton")
+        
+        view.layer.addSublayer(gradient)
+        animationLayers.append(gradient)
+    }
+    
+    // Метод для удаления анимации
+    private func removeSkeletons() {
+        animationLayers.forEach { $0.removeFromSuperlayer() }
+        animationLayers.removeAll()
+    }
+    
 }
 
 // MARK: - Private helpers
@@ -108,15 +151,27 @@ private extension ProfileViewController {
     }
     
     @objc func didTapLogout() {
-        // Очищаем данные
-        ProfileLogoutService.shared.logout()
+        let alert = UIAlertController(
+            title: "Пока, пока!",
+            message: "Уверены что хотите выйти?",
+            preferredStyle: .alert
+        )
         
-        // Переход к экрану авторизации
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let sceneDelegate = windowScene.delegate as? SceneDelegate else { return }
-
-        let splashViewController = SplashViewController()
-        sceneDelegate.window?.rootViewController = splashViewController
+        alert.addAction(UIAlertAction(title: "Да", style: .destructive) { [weak self] _ in
+            // Очищаем данные
+            ProfileLogoutService.shared.logout()
+            
+            // Переход к экрану авторизации
+            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let sceneDelegate = windowScene.delegate as? SceneDelegate else { return }
+            
+            let splashViewController = SplashViewController()
+            sceneDelegate.window?.rootViewController = splashViewController
+        })
+        
+        alert.addAction(UIAlertAction(title: "Нет", style: .cancel))
+        
+        present(alert, animated: true)
     }
     
     func addSubviews() {
