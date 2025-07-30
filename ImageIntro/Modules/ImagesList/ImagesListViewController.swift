@@ -5,8 +5,6 @@ final class ImagesListViewController: UIViewController {
     
     @IBOutlet private var tableView: UITableView!
     
-    // private let photosName: [String] = Array(0..<20).map{ "\($0)" }
-    
     private var photos: [Photo] = []
     
     private lazy var dateFormatter: DateFormatter = {
@@ -89,6 +87,9 @@ extension ImagesListViewController: UITableViewDataSource {
         }
         
         let photo = photos[indexPath.row]
+        
+        imageListCell.delegate = self
+        
         imageListCell.dateLabel.text = formattedDate(photo.createdAt)
         
         let placeholderImage = UIImage(named: "Stub") // Заглушка из Figma
@@ -105,26 +106,10 @@ extension ImagesListViewController: UITableViewDataSource {
 }
 
 extension ImagesListViewController {
-    /*
-    func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-        guard let image = UIImage(named: photosName[indexPath.row]) else {
-            return
-        }
-        
-        cell.cellImage.image = image
-        cell.dateLabel.text = dateFormatter.string(from: Date())
-        
-        let isLiked = indexPath.row % 2 == 0
-        let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
-        cell.likeButton.setImage(likeImage, for: .normal)
-    }
-    */
-    
     private func formattedDate(_ date: Date?) -> String {
         guard let date else { return "" }
         return dateFormatter.string(from: date)
     }
-
 }
 
 // MARK: - UITableViewDelegate
@@ -144,4 +129,45 @@ extension ImagesListViewController: UITableViewDelegate {
     }
 }
 
+extension ImagesListViewController: ImagesListCellDelegate {
+    func imageListCellDidTapLike(_ cell: ImagesListCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else {
+            print("❌ Не удалось получить indexPath для ячейки")
+            return
+        }
 
+        let photo = photos[indexPath.row]
+        let isLike = !photo.isLiked
+
+        // Лог
+        print("❤️ Пользователь \(isLike ? "ставит" : "снимает") лайк для фото \(photo.id)")
+
+        ImagesListService.shared.changeLike(photoId: photo.id, isLike: isLike) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    // Обновление модели
+                    guard let self else { return }
+
+                    if let index = self.photos.firstIndex(where: { $0.id == photo.id }) {
+                        let oldPhoto = self.photos[index]
+                        let newPhoto = Photo(
+                            id: oldPhoto.id,
+                            size: oldPhoto.size,
+                            createdAt: oldPhoto.createdAt,
+                            welcomeDescription: oldPhoto.welcomeDescription,
+                            thumbImageURL: oldPhoto.thumbImageURL,
+                            largeImageURL: oldPhoto.largeImageURL,
+                            isLiked: isLike
+                        )
+                        self.photos = self.photos.withReplaced(itemAt: index, newValue: newPhoto)
+                        self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                    }
+
+                case .failure(let error):
+                    print("❌ Ошибка при лайке: \(error)")
+                }
+            }
+        }
+    }
+}

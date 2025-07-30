@@ -3,6 +3,10 @@ import Foundation
 // MARK: - Ошибки сети
 enum NetworkError: Error {
     case invalidRequest
+    case unauthorized
+    case invalidURL
+    case invalidResponse
+    case httpStatus(Int)
     case httpStatusCode(Int)
     case urlRequestError(Error)
     case urlSessionError
