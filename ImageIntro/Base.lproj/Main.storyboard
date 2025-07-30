@@ -125,14 +125,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rcD-pQ-eZH">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rcD-pQ-eZH">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="lYW-C9-kjE">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="lYW-C9-kjE">
+                                        <rect key="frame" x="0.0" y="0.0" width="1600" height="1059"/>
                                     </imageView>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstItem="lYW-C9-kjE" firstAttribute="top" secondItem="rcD-pQ-eZH" secondAttribute="top" id="OAj-JX-CCC"/>
+                                    <constraint firstItem="lYW-C9-kjE" firstAttribute="leading" secondItem="rcD-pQ-eZH" secondAttribute="leading" id="Svf-IA-xWq"/>
+                                    <constraint firstAttribute="trailing" secondItem="lYW-C9-kjE" secondAttribute="trailing" id="Y7b-jk-Oln"/>
+                                    <constraint firstAttribute="bottom" secondItem="lYW-C9-kjE" secondAttribute="bottom" id="aKH-wv-U1U"/>
+                                </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="Gm9-y3-NJC"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="BpI-g5-aSn"/>
                                 <connections>
@@ -167,14 +172,16 @@
                         <viewLayoutGuide key="safeArea" id="nLU-hg-IVa"/>
                         <color key="backgroundColor" red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="rcD-pQ-eZH" firstAttribute="top" secondItem="nLU-hg-IVa" secondAttribute="top" id="I5P-Oe-gWv"/>
                             <constraint firstItem="nLU-hg-IVa" firstAttribute="trailing" secondItem="rcD-pQ-eZH" secondAttribute="trailing" id="MRn-i1-Hvq"/>
-                            <constraint firstItem="rcD-pQ-eZH" firstAttribute="top" secondItem="oQ1-vQ-8NB" secondAttribute="top" id="P0m-Jy-Tvo"/>
+                            <constraint firstItem="rcD-pQ-eZH" firstAttribute="top" secondItem="nLU-hg-IVa" secondAttribute="top" id="P0m-Jy-Tvo"/>
                             <constraint firstItem="nLU-hg-IVa" firstAttribute="bottom" secondItem="yra-ad-Ja6" secondAttribute="bottom" constant="20" id="Qlg-wG-ce6"/>
                             <constraint firstItem="rcD-pQ-eZH" firstAttribute="leading" secondItem="nLU-hg-IVa" secondAttribute="leading" id="TXs-2Z-Oym"/>
                             <constraint firstItem="as0-vf-nfh" firstAttribute="top" secondItem="nLU-hg-IVa" secondAttribute="top" constant="8" id="VKm-lH-o07"/>
                             <constraint firstItem="as0-vf-nfh" firstAttribute="leading" secondItem="nLU-hg-IVa" secondAttribute="leading" constant="8" id="f5W-Zk-QJ3"/>
-                            <constraint firstAttribute="bottom" secondItem="rcD-pQ-eZH" secondAttribute="bottom" id="gti-l4-oSz"/>
+                            <constraint firstItem="nLU-hg-IVa" firstAttribute="bottom" secondItem="rcD-pQ-eZH" secondAttribute="bottom" id="gti-l4-oSz"/>
                             <constraint firstItem="yra-ad-Ja6" firstAttribute="centerX" secondItem="nLU-hg-IVa" secondAttribute="centerX" id="jjN-5d-JO6"/>
+                            <constraint firstItem="nLU-hg-IVa" firstAttribute="bottom" secondItem="rcD-pQ-eZH" secondAttribute="bottom" id="qsj-9Y-lFF"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="CeC-Zk-XV2"/>
