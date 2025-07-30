@@ -39,7 +39,7 @@
                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                                     </userDefinedRuntimeAttributes>
                                                 </imageView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TCg-2X-ap9" userLabel="Like Button">
+                                                <button opaque="NO" contentMode="scaleToFill" restorationIdentifier="likeButton" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TCg-2X-ap9" userLabel="Like Button">
                                                     <rect key="frame" x="335" y="4" width="42" height="44"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="44" id="bgG-NH-JUC"/>
@@ -56,14 +56,19 @@
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" restorationIdentifier="likeButtonActivityIndicator" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="5TU-mz-qbW">
+                                                    <rect key="frame" x="346" y="16" width="20" height="20"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="gED-j8-2ye" firstAttribute="bottom" secondItem="Mpu-ZK-QIF" secondAttribute="bottom" constant="8" id="70K-Uy-llr"/>
                                                 <constraint firstItem="TCg-2X-ap9" firstAttribute="trailing" secondItem="gED-j8-2ye" secondAttribute="trailing" id="CbR-JY-h28"/>
                                                 <constraint firstItem="gED-j8-2ye" firstAttribute="top" secondItem="mgS-To-Ccg" secondAttribute="top" constant="4" id="G2e-hL-iuS"/>
                                                 <constraint firstAttribute="bottom" secondItem="gED-j8-2ye" secondAttribute="bottom" constant="4" id="MAO-Zm-pnW"/>
+                                                <constraint firstItem="5TU-mz-qbW" firstAttribute="centerX" secondItem="TCg-2X-ap9" secondAttribute="centerX" id="SMV-33-kes"/>
                                                 <constraint firstItem="TCg-2X-ap9" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="mgS-To-Ccg" secondAttribute="leading" constant="20" symbolic="YES" id="UBD-Sn-hiS"/>
                                                 <constraint firstItem="gED-j8-2ye" firstAttribute="trailing" secondItem="TCg-2X-ap9" secondAttribute="trailing" id="UbC-ZT-GWt"/>
+                                                <constraint firstItem="5TU-mz-qbW" firstAttribute="centerY" secondItem="TCg-2X-ap9" secondAttribute="centerY" id="XX8-cg-rN4"/>
                                                 <constraint firstAttribute="trailing" secondItem="gED-j8-2ye" secondAttribute="trailing" constant="16" id="ZO6-kc-UlL"/>
                                                 <constraint firstItem="TCg-2X-ap9" firstAttribute="top" secondItem="gED-j8-2ye" secondAttribute="top" id="cbh-Yo-jCS"/>
                                                 <constraint firstItem="Mpu-ZK-QIF" firstAttribute="leading" secondItem="gED-j8-2ye" secondAttribute="leading" constant="8" id="y40-zN-nML"/>
@@ -82,6 +87,7 @@
                                             <outlet property="cellImage" destination="gED-j8-2ye" id="beo-Ix-HOg"/>
                                             <outlet property="dateLabel" destination="Mpu-ZK-QIF" id="oeG-sF-Yrf"/>
                                             <outlet property="likeButton" destination="TCg-2X-ap9" id="mba-F0-Uvs"/>
+                                            <outlet property="likeButtonActivityIndicator" destination="5TU-mz-qbW" id="ehD-FQ-tsv"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

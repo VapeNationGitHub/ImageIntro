@@ -21,6 +21,7 @@ final class ImagesListViewController: UIViewController {
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         tableView.delegate = self
         tableView.dataSource = self
+        
         ImagesListService.shared.fetchPhotosNextPage()
         
         NotificationCenter.default.addObserver(
@@ -129,6 +130,7 @@ extension ImagesListViewController: UITableViewDelegate {
     }
 }
 
+// MARK: - Обработка нажатия кнопки лайка
 extension ImagesListViewController: ImagesListCellDelegate {
     func imageListCellDidTapLike(_ cell: ImagesListCell) {
         guard let indexPath = tableView.indexPath(for: cell) else {
@@ -142,30 +144,37 @@ extension ImagesListViewController: ImagesListCellDelegate {
         // Лог
         print("❤️ Пользователь \(isLike ? "ставит" : "снимает") лайк для фото \(photo.id)")
 
+        cell.setLikeButtonLoading(true)
+
         ImagesListService.shared.changeLike(photoId: photo.id, isLike: isLike) { [weak self] result in
             DispatchQueue.main.async {
+                
+                guard let self else { return }
+
                 switch result {
                 case .success:
-                    // Обновление модели
-                    guard let self else { return }
-
-                    if let index = self.photos.firstIndex(where: { $0.id == photo.id }) {
-                        let oldPhoto = self.photos[index]
-                        let newPhoto = Photo(
-                            id: oldPhoto.id,
-                            size: oldPhoto.size,
-                            createdAt: oldPhoto.createdAt,
-                            welcomeDescription: oldPhoto.welcomeDescription,
-                            thumbImageURL: oldPhoto.thumbImageURL,
-                            largeImageURL: oldPhoto.largeImageURL,
-                            isLiked: isLike
-                        )
-                        self.photos = self.photos.withReplaced(itemAt: index, newValue: newPhoto)
-                        self.tableView.reloadRows(at: [indexPath], with: .automatic)
-                    }
+             
+                    self.photos = ImagesListService.shared.photos
+                    let updatedPhoto = self.photos[indexPath.row]
+                    let likeImage = updatedPhoto.isLiked
+                        ? UIImage(named: "like_button_on")
+                        : UIImage(named: "like_button_off")
+                    cell.likeButton.setImage(likeImage, for: .normal)
+                    
+                    cell.setLikeButtonLoading(false)
 
                 case .failure(let error):
+                    
+                    cell.setLikeButtonLoading(false)
                     print("❌ Ошибка при лайке: \(error)")
+                    
+                    let alert = UIAlertController(
+                        title: "Ошибка",
+                        message: "Не удалось поставить лайк. Повторите позже.",
+                        preferredStyle: .alert
+                    )
+                    alert.addAction(UIAlertAction(title: "ОК", style: .default))
+                    self.present(alert, animated: true)
                 }
             }
         }
