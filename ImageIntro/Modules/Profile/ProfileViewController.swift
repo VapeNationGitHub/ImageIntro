@@ -1,5 +1,7 @@
 import UIKit
+import Kingfisher
 
+// MARK: - Контроллер профиля пользователя
 final class ProfileViewController: UIViewController {
     
     // MARK: - UI
@@ -14,7 +16,6 @@ final class ProfileViewController: UIViewController {
     
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Екатерина Новикова"
         label.font = UIFont.boldSystemFont(ofSize: 23)
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -23,7 +24,6 @@ final class ProfileViewController: UIViewController {
     
     private let loginNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "@ekaterina_nov"
         label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = UIColor(white: 1, alpha: 0.6)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -32,7 +32,6 @@ final class ProfileViewController: UIViewController {
     
     private let messageLabel: UILabel = {
         let label = UILabel()
-        label.text = "Hello, world!"
         label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -46,20 +45,63 @@ final class ProfileViewController: UIViewController {
         return button
     }()
     
-    // MARK: - viewDidLoad
+    // MARK: - Жизненный цикл
+    
+    private var profileImageServiceObserver: NSObjectProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        profileImageServiceObserver = NotificationCenter.default.addObserver(
+            forName: ProfileImageService.didChangeNotification,
+            object: nil,
+            queue: .main
+        ) {[weak self] _ in
+            guard let self = self else {return}
+            self.updateAvatar()
+        }
+        
+        updateAvatar()
+        
         configureAppearance()
         addSubviews()
         addConstraints()
+        
+        // Обновляем отображение данных профиля
+        if let profile = ProfileService.shared.profile {
+            updateProfileDetails(profile: profile)
+        } else {
+            print("⚠️ Профиль не найден в ProfileService")
+        }
+        
+    }
+    
+    private func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        
+        profileImageView.kf.setImage(
+            with: url,
+            placeholder: UIImage(named: "PhotoProfile")
+        )
+    }
+    
+    
+    // MARK: - Обновление UI из профиля
+    
+    private func updateProfileDetails(profile: Profile) {
+        nameLabel.text = profile.name
+        loginNameLabel.text = profile.loginName
+        messageLabel.text = profile.bio
     }
 }
 
 // MARK: - Private helpers
+
 private extension ProfileViewController {
     
-    // 1. Цвет фона и доп. настройки
     func configureAppearance() {
         view.backgroundColor = UIColor(named: "YP_BlackColor")
         exitButton.addTarget(self, action: #selector(didTapLogout), for: .touchUpInside)
@@ -69,7 +111,6 @@ private extension ProfileViewController {
         tabBarController?.selectedIndex = 0
     }
     
-    // 2. Иерархия
     func addSubviews() {
         view.addSubview(profileImageView)
         view.addSubview(nameLabel)
@@ -78,13 +119,12 @@ private extension ProfileViewController {
         view.addSubview(exitButton)
     }
     
-    // 3. Auto Layout
     func addConstraints() {
         let safe = view.safeAreaLayoutGuide
         
         NSLayoutConstraint.activate([
             
-            // Фотография профиля пользователя
+            // Фото
             profileImageView.topAnchor.constraint(equalTo: safe.topAnchor, constant: 32),
             profileImageView.leadingAnchor.constraint(equalTo: safe.leadingAnchor, constant: 16),
             profileImageView.widthAnchor.constraint(equalToConstant: 70),
@@ -96,7 +136,7 @@ private extension ProfileViewController {
             exitButton.widthAnchor.constraint(equalToConstant: 44),
             exitButton.heightAnchor.constraint(equalToConstant: 44),
             
-            // ФИО
+            // Имя
             nameLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 8),
             nameLabel.leadingAnchor.constraint(equalTo: profileImageView.leadingAnchor),
             nameLabel.trailingAnchor.constraint(lessThanOrEqualTo: exitButton.leadingAnchor, constant: -8),
@@ -106,7 +146,7 @@ private extension ProfileViewController {
             loginNameLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
             loginNameLabel.trailingAnchor.constraint(lessThanOrEqualTo: safe.trailingAnchor, constant: -16),
             
-            // Сообщение "Hello, world"
+            // Bio
             messageLabel.topAnchor.constraint(equalTo: loginNameLabel.bottomAnchor, constant: 8),
             messageLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
             messageLabel.trailingAnchor.constraint(lessThanOrEqualTo: safe.trailingAnchor, constant: -16)
