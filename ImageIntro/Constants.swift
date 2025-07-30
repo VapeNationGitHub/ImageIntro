@@ -7,5 +7,10 @@ enum Constants {
     
     static let AccessScope = "public+read_user+write_likes"
     
-    static let DefaultBaseURL = URL(string: "https://api.unsplash.com")!
+    static let DefaultBaseURL: URL = {
+        guard let url = URL(string: "https://api.unsplash.com") else {
+            fatalError("[Constants]: Некорректный URL")
+        }
+        return url
+    }()
 }
