@@ -30,13 +30,23 @@ final class ImagesListService {
             return
         }
         
-        var urlComponents = URLComponents(string: "https://api.unsplash.com/photos")!
+        guard var urlComponents = URLComponents(string: "https://api.unsplash.com/photos") else {
+            assertionFailure("❌ Не удалось создать URLComponents")
+            isLoading = false
+            return
+        }
+        
         urlComponents.queryItems = [
             URLQueryItem(name: "page", value: "\(nextPage)"),
             URLQueryItem(name: "per_page", value: "10")
         ]
         
-        var request = URLRequest(url: urlComponents.url!)
+        guard let url = urlComponents.url else {
+            assertionFailure("❌ Невалидный URL из URLComponents")
+            isLoading = false
+            return
+        }
+        var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
