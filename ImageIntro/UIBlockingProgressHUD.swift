@@ -17,7 +17,9 @@ final class UIBlockingProgressHUD {
     
     // MARK: - Скрывает индикатор и разблокирует UI
     static func dismiss() {
-        window?.isUserInteractionEnabled = true
-        ProgressHUD.dismiss()
+        DispatchQueue.main.async {
+            window?.isUserInteractionEnabled = true
+            ProgressHUD.dismiss()
+        }
     }
 }

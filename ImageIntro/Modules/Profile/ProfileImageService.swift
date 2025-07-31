@@ -69,6 +69,10 @@ final class ProfileImageService {
         task?.resume()
     }
     
+    func reset() {
+        avatarURL = nil
+    }
+    
     // MARK: - Приватный метод создания запроса
     private func makeRequest(for username: String) -> URLRequest? {
         guard let url = URL(string: "https://api.unsplash.com/users/\(username)") else {
@@ -77,7 +81,7 @@ final class ProfileImageService {
         }
         
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
+        request.httpMethod = HTTPMethod.get.rawValue
         
         if let token = KeychainTokenStorage.shared.token {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")

@@ -3,6 +3,10 @@ import Foundation
 // MARK: - Ошибки сети
 enum NetworkError: Error {
     case invalidRequest
+    case unauthorized
+    case invalidURL
+    case invalidResponse
+    case httpStatus(Int)
     case httpStatusCode(Int)
     case urlRequestError(Error)
     case urlSessionError
@@ -78,7 +82,7 @@ final class OAuth2Service {
         }
         
         var request = URLRequest(url: url)
-        request.httpMethod = "POST"
+        request.httpMethod = HTTPMethod.post.rawValue
         
         let parameters = [
             "client_id": Constants.AccessKey,
