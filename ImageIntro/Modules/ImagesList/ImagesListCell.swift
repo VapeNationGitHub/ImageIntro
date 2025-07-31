@@ -12,7 +12,7 @@ final class ImagesListCell: UITableViewCell {
     @IBOutlet weak var cellImage: UIImageView!
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet var dateLabel: UILabel!
-    @IBOutlet weak var likeButtonActivityIndicator: UIActivityIndicatorView!
+    @IBOutlet private weak var likeButtonActivityIndicator: UIActivityIndicatorView!
     
     override func prepareForReuse() {
         super.prepareForReuse()

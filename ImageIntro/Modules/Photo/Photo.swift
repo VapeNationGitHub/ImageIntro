@@ -1,4 +1,4 @@
-import UIKit
+import Foundation
 
 struct Photo {
     let id: String

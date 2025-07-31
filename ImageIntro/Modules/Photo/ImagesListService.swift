@@ -1,5 +1,4 @@
 import Foundation
-import UIKit
 
 final class ImagesListService {
     // MARK: - Singleton
@@ -47,7 +46,7 @@ final class ImagesListService {
             return
         }
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
+        request.httpMethod = HTTPMethod.get.rawValue
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
@@ -110,7 +109,7 @@ final class ImagesListService {
         
         // Настраиваем запрос: метод POST (если лайк) или DELETE (если дизлайк)
         var request = URLRequest(url: url)
-        request.httpMethod = isLike ? "POST" : "DELETE"
+        request.httpMethod = isLike ? HTTPMethod.post.rawValue : HTTPMethod.delete.rawValue
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         

@@ -109,8 +109,8 @@ extension ImagesListViewController: UITableViewDataSource {
         }
         
         let likeImage = photo.isLiked
-        ? UIImage(named: "like_button_on")
-        : UIImage(named: "like_button_off")
+        ? UIImage(resource: .likeButtonOn)
+        : UIImage(resource: .likeButtonOff)
         imageListCell.likeButton.setImage(likeImage, for: .normal)
         
         return imageListCell
