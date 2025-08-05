@@ -9,8 +9,18 @@ protocol WebViewViewControllerDelegate: AnyObject {
     func webViewViewControllerDidCancel(_ vc: WebViewViewController)
 }
 
+// MARK: - Протокол WebViewViewControllerProtocol
+public protocol WebViewViewControllerProtocol: AnyObject {
+    var presenter: WebViewPresenterProtocol? { get set }
+    func load(request: URLRequest)
+    func setProgressValue(_ newValue: Float)
+    func setProgressHidden(_ isHidden: Bool)
+}
+
 // MARK: - Контроллер авторизации через WebView
-final class WebViewViewController: UIViewController {
+final class WebViewViewController: UIViewController & WebViewViewControllerProtocol {
+    
+    var presenter: WebViewPresenterProtocol?
     
     @IBOutlet private var webView: WKWebView!
     @IBOutlet private var progressView: UIProgressView!
@@ -26,26 +36,12 @@ final class WebViewViewController: UIViewController {
         super.viewDidLoad()
         
         webView.navigationDelegate = self
-        
-        guard var urlComponents = URLComponents(string: UnsplashAuthorizeURLString) else {
-            return
-        }
-        
-        urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: Constants.AccessKey),
-            URLQueryItem(name: "redirect_uri", value: Constants.RedirectURI),
-            URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "scope", value: Constants.AccessScope)
-        ]
-        guard let url = urlComponents.url else {
-            print("❌ Не удалось создать URL из компонентов")
-            return
-        }
-        
-        let request = URLRequest(url: url)
+        // updateProgress()
+        presenter?.viewDidLoad()
+    }
+    
+    func load(request: URLRequest) {
         webView.load(request)
-        
-        updateProgress()
     }
     
     @IBAction private func didTapBackButton(_ sender: Any?) {
@@ -55,22 +51,53 @@ final class WebViewViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        // Подписка на изменения estimatedProgress (современный KVO)
-        estimatedProgressObservation = webView.observe(\.estimatedProgress, options: [.new]) { [weak self] _, _ in
-            self?.updateProgress()
+        /*
+         // Подписка на изменения estimatedProgress (современный KVO)
+         estimatedProgressObservation = webView.observe(\.estimatedProgress, options: [.new]) { [weak self] _, _ in
+         self?.updateProgress()
+         }
+         */
+        
+        // Подписка на KVO
+        webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
+        
+        
+        // updateProgress()
+    }
+    
+    override func observeValue(
+        forKeyPath keyPath: String?,
+        of object: Any?,
+        change: [NSKeyValueChangeKey : Any]?,
+        context: UnsafeMutableRawPointer?
+    ) {
+        if keyPath == #keyPath(WKWebView.estimatedProgress) {
+            presenter?.didUpdateProgressValue(webView.estimatedProgress)
+        } else {
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
-        updateProgress()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // Отписка от наблюдения
-        estimatedProgressObservation = nil
+        // estimatedProgressObservation = nil
+        webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress))
     }
     
-    private func updateProgress() {
-        progressView.progress = Float(webView.estimatedProgress)
-        progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
+    /*
+     private func updateProgress() {
+     progressView.progress = Float(webView.estimatedProgress)
+     progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
+     }
+     */
+    
+    func setProgressValue(_ newValue: Float) {
+        progressView.progress = newValue
+    }
+    
+    func setProgressHidden(_ isHidden: Bool) {
+        progressView.isHidden = isHidden
     }
 }
 
@@ -90,16 +117,7 @@ extension WebViewViewController: WKNavigationDelegate {
     }
     // MARK: - Извлечение code из URL
     private func code(from navigationAction: WKNavigationAction) -> String? {
-        if
-            let url = navigationAction.request.url,
-            let urlComponents = URLComponents(string: url.absoluteString),
-            urlComponents.path == "/oauth/authorize/native",
-            let items = urlComponents.queryItems,
-            let codeItem = items.first(where: { $0.name == "code" })
-        {
-            return codeItem.value
-        } else {
-            return nil
-        }
+        guard let url = navigationAction.request.url else { return nil }
+        return presenter?.code(from: url)
     }
 }
