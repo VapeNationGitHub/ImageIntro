@@ -30,7 +30,6 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     // MARK: - Свойство для наблюдения за estimatedProgress
     private var estimatedProgressObservation: NSKeyValueObservation?
     
-    
     // MARK: - Жизненный цикл
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,18 +50,8 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        /*
-         // Подписка на изменения estimatedProgress (современный KVO)
-         estimatedProgressObservation = webView.observe(\.estimatedProgress, options: [.new]) { [weak self] _, _ in
-         self?.updateProgress()
-         }
-         */
-        
         // Подписка на KVO
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
-        
-        
-        // updateProgress()
     }
     
     override func observeValue(
@@ -81,16 +70,8 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // Отписка от наблюдения
-        // estimatedProgressObservation = nil
         webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress))
     }
-    
-    /*
-     private func updateProgress() {
-     progressView.progress = Float(webView.estimatedProgress)
-     progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
-     }
-     */
     
     func setProgressValue(_ newValue: Float) {
         progressView.progress = newValue
@@ -115,6 +96,7 @@ extension WebViewViewController: WKNavigationDelegate {
             decisionHandler(.allow)
         }
     }
+    
     // MARK: - Извлечение code из URL
     private func code(from navigationAction: WKNavigationAction) -> String? {
         guard let url = navigationAction.request.url else { return nil }
