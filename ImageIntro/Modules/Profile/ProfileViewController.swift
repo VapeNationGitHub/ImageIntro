@@ -2,10 +2,10 @@ import UIKit
 import Kingfisher
 
 // MARK: - Контроллер профиля пользователя
-final class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
+    
     
     // MARK: - UI
-    
     private let profileImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "PhotoProfile"))
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -45,12 +45,25 @@ final class ProfileViewController: UIViewController {
         return button
     }()
     
-    // MARK: - Жизненный цикл
     
+    // MARK: - Презентер
+    private var presenter: ProfilePresenterProtocol!
+    
+    func configure(_ presenter: ProfilePresenterProtocol) {
+        self.presenter = presenter
+        self.presenter.view = self
+    }
+    
+    
+    // MARK: - Жизненный цикл
     private var profileImageServiceObserver: NSObjectProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        configureAppearance()
+        addSubviews()
+        addConstraints()
         
         profileImageServiceObserver = NotificationCenter.default.addObserver(
             forName: ProfileImageService.didChangeNotification,
@@ -58,20 +71,7 @@ final class ProfileViewController: UIViewController {
             queue: .main
         ) {[weak self] _ in
             guard let self = self else {return}
-            self.updateAvatar()
-        }
-        
-        updateAvatar()
-        
-        configureAppearance()
-        addSubviews()
-        addConstraints()
-        
-        // Обновляем отображение данных профиля
-        if let profile = ProfileService.shared.profile {
-            updateProfileDetails(profile: profile)
-        } else {
-            print("⚠️ Профиль не найден в ProfileService")
+            self.presenter.updateAvatarNotification()
         }
         
         addSkeleton(to: profileImageView, cornerRadius: 35)
@@ -81,27 +81,46 @@ final class ProfileViewController: UIViewController {
         
     }
     
-    private func updateAvatar() {
-        guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let url = URL(string: profileImageURL)
-        else { return }
-        
-        profileImageView.kf.setImage(
-            with: url,
-            placeholder: UIImage(named: "PhotoProfile")
-        )
-        self.removeSkeletons()
-    }
-    
     
     // MARK: - Обновление UI из профиля
-    private func updateProfileDetails(profile: Profile) {
+    func updateProfileDetails(profile: Profile) {
         nameLabel.text = profile.name
         loginNameLabel.text = profile.loginName
         messageLabel.text = profile.bio
         removeSkeletons()
     }
+    
+    func updateAvatar(url: URL) {
+        profileImageView.kf.setImage(
+            with: url,
+            placeholder: UIImage(named: "PhotoProfile")
+        )
+        removeSkeletons()
+    }
+    
+    
+    func showLogoutAlert() {
+        let alert = UIAlertController(
+            title: "Пока, пока!",
+            message: "Уверены что хотите выйти?",
+            preferredStyle: .alert
+        )
+        
+        alert.addAction(UIAlertAction(title: "Да", style: .destructive) { [weak self] _ in
+            ProfileLogoutService.shared.logout()
+            
+            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let sceneDelegate = windowScene.delegate as? SceneDelegate else { return }
+            
+            let splashViewController = SplashViewController()
+            sceneDelegate.window?.rootViewController = splashViewController
+        })
+        
+        alert.addAction(UIAlertAction(title: "Нет", style: .cancel))
+        
+        present(alert, animated: true)
+    }
+    
     
     // MARK: - Анимация в профиле
     // Переменная для хранения градиентных слоёв
@@ -139,11 +158,7 @@ final class ProfileViewController: UIViewController {
         animationLayers.removeAll()
     }
     
-}
-
-// MARK: - Private helpers
-
-private extension ProfileViewController {
+    // MARK: - UI Настройка
     
     func configureAppearance() {
         view.backgroundColor = UIColor(named: "YP_BlackColor")
@@ -151,27 +166,7 @@ private extension ProfileViewController {
     }
     
     @objc func didTapLogout() {
-        let alert = UIAlertController(
-            title: "Пока, пока!",
-            message: "Уверены что хотите выйти?",
-            preferredStyle: .alert
-        )
-        
-        alert.addAction(UIAlertAction(title: "Да", style: .destructive) { [weak self] _ in
-            // Очищаем данные
-            ProfileLogoutService.shared.logout()
-            
-            // Переход к экрану авторизации
-            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                  let sceneDelegate = windowScene.delegate as? SceneDelegate else { return }
-            
-            let splashViewController = SplashViewController()
-            sceneDelegate.window?.rootViewController = splashViewController
-        })
-        
-        alert.addAction(UIAlertAction(title: "Нет", style: .cancel))
-        
-        present(alert, animated: true)
+        presenter.didTapLogout()
     }
     
     func addSubviews() {

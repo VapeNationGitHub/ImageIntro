@@ -5,6 +5,7 @@ import ProgressHUD
 // MARK: - Контроллер загрузочного экрана Splash
 final class SplashViewController: UIViewController {
     
+    
     // MARK: - UI
     private let logoImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "splash_screen_logo"))
@@ -12,15 +13,17 @@ final class SplashViewController: UIViewController {
         return imageView
     }()
     
+    
     // MARK: - Сервисы
     private let oauth2Service = OAuth2Service.shared
     private let oauth2TokenStorage = KeychainTokenStorage.shared
     private let profileService = ProfileService.shared
     
+    
     // MARK: - Жизненный цикл
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .ypBlack // если используешь тему
+        view.backgroundColor = .ypBlack
         setupLayout()
     }
     
@@ -41,6 +44,7 @@ final class SplashViewController: UIViewController {
         .lightContent
     }
     
+    
     // MARK: - Верстка
     private func setupLayout() {
         view.addSubview(logoImageView)
@@ -49,6 +53,7 @@ final class SplashViewController: UIViewController {
             logoImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
+    
     
     // MARK: - Навигация
     private func showAuthFlow() {
@@ -75,6 +80,7 @@ final class SplashViewController: UIViewController {
         window.rootViewController = tabBarController
     }
 }
+
 
 // MARK: - Делегат авторизации
 extension SplashViewController: AuthViewControllerDelegate {
@@ -117,7 +123,6 @@ extension SplashViewController: AuthViewControllerDelegate {
                 
             case .failure(let error):
                 print("❌ Ошибка получения профиля: \(error)")
-                // Можно добавить alert здесь
             }
         }
     }

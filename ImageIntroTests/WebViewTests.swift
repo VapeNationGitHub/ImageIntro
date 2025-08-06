@@ -71,11 +71,11 @@ final class WebViewTests: XCTestCase {
         // given
         let configuration = AuthConfiguration.standard
         let authHelper = AuthHelper(configuration: configuration)
-
+        
         // when
         let url = authHelper.authURL()
         let urlString = url?.absoluteString ?? ""
-
+        
         // then
         XCTAssertTrue(urlString.contains(configuration.authURLString), "URL не содержит базового адреса авторизации")
         XCTAssertTrue(urlString.contains(configuration.accessKey), "URL не содержит accessKey")
@@ -91,10 +91,10 @@ final class WebViewTests: XCTestCase {
         urlComponents.queryItems = [URLQueryItem(name: "code", value: "test code")]
         let url = urlComponents.url!
         let authHelper = AuthHelper()
-
+        
         // when
         let code = authHelper.code(from: url)
-
+        
         // then
         XCTAssertEqual(code, "test code", "Код из URL извлечён некорректно")
     }
