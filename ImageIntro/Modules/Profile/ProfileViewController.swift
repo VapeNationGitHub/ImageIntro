@@ -79,6 +79,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         addSkeleton(to: loginNameLabel)
         addSkeleton(to: messageLabel)
         
+        presenter.viewDidLoad()
     }
     
     
