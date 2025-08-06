@@ -1,22 +1,11 @@
 import Foundation
 
 final class ImagesListPresenter: ImagesListPresenterProtocol {
-    
-    // MARK: - Свойства
-    weak var view: ImagesListViewProtocol?
+    weak var view: ImagesListViewControllerProtocol?
     
     private var photos: [Photo] = []
-    private let imagesListService: ImagesListService
+    private let imagesListService = ImagesListService.shared
     
-    init(imagesListService: ImagesListService = .shared) {
-        self.imagesListService = imagesListService
-    }
-    
-    var photosCount: Int {
-        photos.count
-    }
-    
-    // MARK: - Методы жизненного цикла
     func viewDidLoad() {
         imagesListService.fetchPhotosNextPage()
         
@@ -25,53 +14,47 @@ final class ImagesListPresenter: ImagesListPresenterProtocol {
             object: nil,
             queue: .main
         ) { [weak self] _ in
-            self?.didReceivePhotosUpdate()
+            guard let self = self else { return }
+            let oldCount = self.photos.count
+            self.photos = self.imagesListService.photos
+            let newCount = self.photos.count
+            if newCount > oldCount {
+                let indexPaths = (oldCount..<newCount).map { IndexPath(row: $0, section: 0) }
+                view?.insertRows(at: indexPaths)
+            }
         }
     }
     
-    private func didReceivePhotosUpdate() {
-        let oldCount = photos.count
-        let newPhotos = imagesListService.photos
-        let newCount = newPhotos.count
-        
-        guard newCount > oldCount else { return }
-        
-        photos = newPhotos
-        let indexPaths = (oldCount..<newCount).map { IndexPath(row: $0, section: 0) }
-        view?.insertRows(at: indexPaths)
+    var photosCount: Int {
+        return photos.count
     }
     
     func photo(at indexPath: IndexPath) -> Photo {
         return photos[indexPath.row]
     }
     
-    // MARK: - Обработка лайка
-    func didTapLike(at indexPath: IndexPath) {
-        var photo = photo(at: indexPath)
-        let isLike = !photo.isLiked
-        
-        imagesListService.changeLike(photoId: photo.id, isLike: isLike) { [weak self] result in
-            guard let self else { return }
-            
-            DispatchQueue.main.async {
-                switch result {
-                case .success:
-                    self.photos = self.imagesListService.photos
-                    self.view?.reloadRow(at: indexPath)
-                    
-                case .failure(let error):
-                    print("❌ Ошибка при лайке: \(error)")
-                    self.view?.showLikeError()
-                }
-            }
-        }
-    }
-    
-    // MARK: - Проверка необходимости догрузки
-    func shouldFetchNextPage(for indexPath: IndexPath) {
+    func willDisplayCell(at indexPath: IndexPath) {
         if indexPath.row == photos.count - 1 {
             imagesListService.fetchPhotosNextPage()
         }
     }
+    
+    func didSelectPhoto(at indexPath: IndexPath) {
+        view?.showSingleImage(photo(at: indexPath))
+    }
+    
+    func didTapLike(at indexPath: IndexPath, completion: @escaping (Result<Photo, Error>) -> Void) {
+        let photo = photos[indexPath.row]
+        let isLike = !photo.isLiked
+        imagesListService.changeLike(photoId: photo.id, isLike: isLike) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success:
+                self.photos = imagesListService.photos
+                completion(.success(self.photos[indexPath.row]))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
 }
-
