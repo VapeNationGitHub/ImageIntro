@@ -61,8 +61,8 @@ class Image_FeedUITests: XCTestCase {
         
         let cellToLike = tablesQuery.children(matching: .cell).element(boundBy: 1)
         
-        cellToLike.buttons["like button off"].tap()
-        cellToLike.buttons["like button on"].tap()
+        cellToLike.buttons["like_button_off"].tap()
+        cellToLike.buttons["like_button_on"].tap()
         
         sleep(2)
         
@@ -84,8 +84,8 @@ class Image_FeedUITests: XCTestCase {
         sleep(3)
         app.tabBars.buttons.element(boundBy: 1).tap()
         
-        XCTAssertTrue(app.staticTexts["Nikita Ponomarev"].exists)
-        XCTAssertTrue(app.staticTexts["@crocko47"].exists)
+        XCTAssertTrue(app.staticTexts["First_Name Last_Name"].exists)
+        XCTAssertTrue(app.staticTexts["@username"].exists)
         
         app.buttons["Exit"].tap()
         
