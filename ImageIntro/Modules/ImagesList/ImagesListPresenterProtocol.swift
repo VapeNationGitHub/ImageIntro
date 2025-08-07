@@ -8,4 +8,5 @@ protocol ImagesListPresenterProtocol: AnyObject {
     func didSelectPhoto(at indexPath: IndexPath)
     func willDisplayCell(at indexPath: IndexPath)
     func didTapLike(at indexPath: IndexPath, completion: @escaping (Result<Photo, Error>) -> Void)
+    func didChangeNotification()
 }

@@ -1,60 +1,89 @@
 import Foundation
 
+// MARK: - Презентер экрана со списком изображений
 final class ImagesListPresenter: ImagesListPresenterProtocol {
+
+    // MARK: - Свойства
     weak var view: ImagesListViewControllerProtocol?
-    
-    private var photos: [Photo] = []
-    private let imagesListService = ImagesListService.shared
-    
+
+    private var imagesListService: ImagesListServiceProtocol
+
+    // MARK: - Инициализация
+    init(imagesListService: ImagesListServiceProtocol = ImagesListService.shared) {
+        self.imagesListService = imagesListService
+    }
+
+    // MARK: - Жизненный цикл
     func viewDidLoad() {
         imagesListService.fetchPhotosNextPage()
-        
-        NotificationCenter.default.addObserver(
-            forName: ImagesListService.didChangeNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            guard let self = self else { return }
-            let oldCount = self.photos.count
-            self.photos = self.imagesListService.photos
-            let newCount = self.photos.count
-            if newCount > oldCount {
-                let indexPaths = (oldCount..<newCount).map { IndexPath(row: $0, section: 0) }
-                view?.insertRows(at: indexPaths)
-            }
-        }
     }
-    
-    var photosCount: Int {
-        return photos.count
+
+    // MARK: - Обновление данных
+    func didChangeNotification() {
+        let newPhotos = imagesListService.photos
+        let indexPaths = (0..<newPhotos.count).map { IndexPath(row: $0, section: 0) }
+        view?.insertRows(at: indexPaths)
     }
-    
-    func photo(at indexPath: IndexPath) -> Photo {
-        return photos[indexPath.row]
+
+    // MARK: - Взаимодействие с ячейками
+    func didTapCell(at indexPath: IndexPath) {
+        let photo = imagesListService.photos[indexPath.row]
+        view?.showSingleImage(photo)
     }
-    
+
+    func didSelectPhoto(at indexPath: IndexPath) {
+        let photo = imagesListService.photos[indexPath.row]
+        view?.showSingleImage(photo)
+    }
+
     func willDisplayCell(at indexPath: IndexPath) {
-        if indexPath.row == photos.count - 1 {
+        if indexPath.row == imagesListService.photos.count - 1 {
             imagesListService.fetchPhotosNextPage()
         }
     }
-    
-    func didSelectPhoto(at indexPath: IndexPath) {
-        view?.showSingleImage(photo(at: indexPath))
-    }
-    
+
+    // MARK: - Лайки
     func didTapLike(at indexPath: IndexPath, completion: @escaping (Result<Photo, Error>) -> Void) {
-        let photo = photos[indexPath.row]
+        let photo = imagesListService.photos[indexPath.row]
         let isLike = !photo.isLiked
+
         imagesListService.changeLike(photoId: photo.id, isLike: isLike) { [weak self] result in
-            guard let self else { return }
             switch result {
             case .success:
-                self.photos = imagesListService.photos
-                completion(.success(self.photos[indexPath.row]))
+                let updatedPhoto = self?.imagesListService.photos[indexPath.row]
+                if let updatedPhoto = updatedPhoto {
+                    completion(.success(updatedPhoto))
+                }
             case .failure(let error):
+                self?.view?.showLikeError()
                 completion(.failure(error))
             }
         }
+    }
+
+    func changeLike(at indexPath: IndexPath) {
+        let photo = imagesListService.photos[indexPath.row]
+        let isLike = !photo.isLiked
+
+        imagesListService.changeLike(photoId: photo.id, isLike: isLike) { [weak self] result in
+            switch result {
+            case .success:
+                break
+            case .failure:
+                self?.view?.showLikeError()
+            }
+        }
+    }
+
+    // MARK: - Получение данных
+    
+    /// Количество фотографий в ленте
+    var photosCount: Int {
+        return imagesListService.photos.count
+    }
+
+    /// Получение фотографии по indexPath
+    func photo(at indexPath: IndexPath) -> Photo {
+        return imagesListService.photos[indexPath.row]
     }
 }
