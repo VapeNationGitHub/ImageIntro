@@ -77,7 +77,6 @@ final class ImagesListCell: UITableViewCell {
             cellImage.image = UIImage(named: "placeholder_error")
         }
     }
-    
 }
 
 

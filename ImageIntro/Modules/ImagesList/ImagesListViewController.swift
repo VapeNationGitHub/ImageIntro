@@ -188,8 +188,12 @@ extension ImagesListViewController: ImagesListViewControllerProtocol {
     
     /// Анимированная вставка новых ячеек
     func insertRows(at indexPaths: [IndexPath]) {
-        tableView.performBatchUpdates {
-            tableView.insertRows(at: indexPaths, with: .automatic)
+        guard !indexPaths.isEmpty else { return }
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.tableView.performBatchUpdates({
+                self.tableView.insertRows(at: indexPaths, with: .automatic)
+            })
         }
     }
     

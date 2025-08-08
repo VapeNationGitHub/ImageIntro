@@ -110,10 +110,10 @@ extension SplashViewController: AuthViewControllerDelegate {
     private func fetchProfile(_ token: String) {
         UIBlockingProgressHUD.show()
         profileService.fetchProfile(token) { [weak self] result in
-            UIBlockingProgressHUD.dismiss()
             guard let self = self else { return }
-            
             print("👀 fetchProfile начал работу")
+            
+            UIBlockingProgressHUD.dismiss()
             
             switch result {
             case .success(let profile):
@@ -122,7 +122,24 @@ extension SplashViewController: AuthViewControllerDelegate {
                 self.switchToTabBarController()
                 
             case .failure(let error):
-                print("❌ Ошибка получения профиля: \(error)")
+                switch error {
+                case let networkError as NetworkError:
+                    switch networkError {
+                    case .httpStatusCode(401):
+                        print("🔒 Невалидный токен. Удаляем и запускаем авторизацию.")
+                        oauth2TokenStorage.removeToken()
+                        showAuthFlow()
+                    case .httpStatusCode(403):
+                        print("⛔️ Доступ запрещён (403). Удаляем токен и запускаем авторизацию.")
+                        oauth2TokenStorage.removeToken()
+                        showAuthFlow()
+                    default:
+                        print("🚨 Ошибка сети: \(networkError)")
+                    }
+                default:
+                    print("🚨 Другая ошибка: \(error.localizedDescription)")
+                    
+                }
             }
         }
     }
