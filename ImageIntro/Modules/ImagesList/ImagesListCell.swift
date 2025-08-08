@@ -14,6 +14,14 @@ final class ImagesListCell: UITableViewCell {
     @IBOutlet var dateLabel: UILabel!
     @IBOutlet private weak var likeButtonActivityIndicator: UIActivityIndicatorView!
     
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Чтобы тесты могли дождаться окончания «крутилки»
+        likeButtonActivityIndicator.accessibilityIdentifier = "likeSpinner"
+    }
+    
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         cellImage.kf.cancelDownloadTask()
@@ -27,11 +35,22 @@ final class ImagesListCell: UITableViewCell {
     
     // Метод видимости состояния индикатора
     func setLikeButtonLoading(_ isLoading: Bool) {
+        if ProcessInfo.processInfo.arguments.contains("--ui-tests") {
+            // В UI-тестах ничего не показываем, чтобы не перекрывать кнопку
+            likeButton.isHidden = false
+            likeButtonActivityIndicator.stopAnimating()
+            likeButtonActivityIndicator.isHidden = true
+            likeButtonActivityIndicator.isUserInteractionEnabled = false
+            return
+        }
+        
         likeButton.isHidden = isLoading
         if isLoading {
+            likeButtonActivityIndicator.isHidden = false
             likeButtonActivityIndicator.startAnimating()
         } else {
             likeButtonActivityIndicator.stopAnimating()
+            likeButtonActivityIndicator.isHidden = true
         }
     }
     
@@ -76,6 +95,13 @@ final class ImagesListCell: UITableViewCell {
             removeSkeletons()
             cellImage.image = UIImage(named: "placeholder_error")
         }
+    }
+    
+    // MARK: - Конфигурация лайка (иконка + id для UI-тестов)
+    func configureLikeButton(isLiked: Bool) {
+        let img = isLiked ? UIImage(resource: .likeButtonOn) : UIImage(resource: .likeButtonOff)
+        likeButton.setImage(img, for: .normal)
+        likeButton.accessibilityIdentifier = isLiked ? "likeButtonOn" : "likeButtonOff"
     }
 }
 

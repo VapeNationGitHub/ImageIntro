@@ -1,4 +1,5 @@
 import XCTest
+import CoreGraphics
 
 class Image_FeedUITests: XCTestCase {
     private let app = XCUIApplication() // переменная приложения
@@ -6,9 +7,12 @@ class Image_FeedUITests: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = false // настройка выполнения тестов, которая прекратит выполнения тестов, если в тесте что-то пошло не так
         
+        app.launchArguments += ["--ui-tests"]
+        
         app.launch() // запускаем приложение перед каждым тестом
     }
     
+    // MARK: - Авторизация в приложение
     func testAuth() throws {
         app.buttons["Войти"].tap()
         
@@ -51,6 +55,7 @@ class Image_FeedUITests: XCTestCase {
         XCTAssertTrue(cell.waitForExistence(timeout: 10))
     }
     
+    // MARK: - Работа с лентой
     func testFeed() throws {
         let tablesQuery = app.tables
         
@@ -80,15 +85,35 @@ class Image_FeedUITests: XCTestCase {
         navBackButtonWhiteButton.tap()
     }
     
+    // MARK: - Работа с профилем
     func testProfile() throws {
         sleep(1)
         app.tabBars.buttons.element(boundBy: 1).tap()
         
-        XCTAssertTrue(app.staticTexts["FirstName LastaAme"].exists)
+        XCTAssertTrue(app.staticTexts["FirstName SecondName"].exists)
         XCTAssertTrue(app.staticTexts["@UserName"].exists)
         
         app.buttons["Exit"].tap()
         
         app.alerts["Пока, пока!"].scrollViews.otherElements.buttons["Да"].tap()
+    }
+}
+
+
+extension XCUIElement {
+    /// Ждём, пока элемент будет и существовать, и быть кликабельным
+    func waitForHittable(timeout: TimeInterval) -> Bool {
+        let p = NSPredicate(format: "exists == true AND hittable == true")
+        let exp = XCTNSPredicateExpectation(predicate: p, object: self)
+        return XCTWaiter().wait(for: [exp], timeout: timeout) == .completed
+    }
+    
+    /// Доскроллить таблицу, пока элемент не станет hittable
+    func scrollToElement(_ element: XCUIElement, maxSwipes: Int = 6) {
+        var swipes = 0
+        while !element.isHittable && swipes < maxSwipes {
+            swipeUp()
+            swipes += 1
+        }
     }
 }

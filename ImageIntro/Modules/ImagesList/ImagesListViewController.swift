@@ -34,6 +34,7 @@ final class ImagesListViewController: UIViewController {
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.accessibilityIdentifier = "images_table"
         presenter.viewDidLoad()
         
         // Подписка на уведомление о загрузке новых фото
@@ -118,6 +119,8 @@ extension ImagesListViewController: UITableViewDataSource {
         ? UIImage(resource: .likeButtonOn)
         : UIImage(resource: .likeButtonOff)
         imageListCell.likeButton.setImage(likeImage, for: .normal)
+        imageListCell.likeButton.accessibilityIdentifier = photo.isLiked ? "likeButtonOn" : "likeButtonOff"
+        imageListCell.configureLikeButton(isLiked: photo.isLiked)
         
         return imageListCell
     }
@@ -172,9 +175,8 @@ extension ImagesListViewController: ImagesListCellDelegate {
                     ? UIImage(resource: .likeButtonOn)
                     : UIImage(resource: .likeButtonOff)
                     cell.likeButton.setImage(likeImage, for: .normal)
+                    cell.likeButton.accessibilityIdentifier = updatedPhoto.isLiked ? "likeButtonOn" : "likeButtonOff"
                     
-                    // Анимация обновления ячейки
-                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
                 case .failure:
                     self.showLikeError()
                 }
