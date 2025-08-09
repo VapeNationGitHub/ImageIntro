@@ -3,15 +3,18 @@ import Foundation
 // MARK: - Сервис загрузки URL аватарки пользователя
 final class ProfileImageService {
     
+    
     // MARK: - Singleton
     static let shared = ProfileImageService()
     static let didChangeNotification = Notification.Name(rawValue: "ProfileImageServiceDidChangeNotification")
     private init() {}
     
+    
     // MARK: - Свойства
     private var task: URLSessionTask?
     private var lastUsername: String?
     private(set) var avatarURL: String?
+    
     
     // MARK: - Метод получения URL маленькой аватарки пользователя
     func fetchProfileImageURL(
@@ -73,6 +76,7 @@ final class ProfileImageService {
         avatarURL = nil
     }
     
+    
     // MARK: - Приватный метод создания запроса
     private func makeRequest(for username: String) -> URLRequest? {
         guard let url = URL(string: "https://api.unsplash.com/users/\(username)") else {
@@ -94,6 +98,11 @@ final class ProfileImageService {
     }
 }
 
+
+// MARK: - Поддержка протокола ProfileImageServiceProtocol
+extension ProfileImageService: ProfileImageServiceProtocol {}
+
+
 // MARK: - Структура для декодирования JSON-ответа
 struct UserResult: Codable {
     let profileImage: ProfileImage
@@ -106,6 +115,7 @@ struct UserResult: Codable {
 struct ProfileImage: Codable {
     let small: String
 }
+
 
 // MARK: - Ошибки сервиса
 enum ProfileImageServiceError: Error {
