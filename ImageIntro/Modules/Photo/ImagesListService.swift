@@ -1,6 +1,6 @@
 import Foundation
 
-final class ImagesListService {
+final class ImagesListService: ImagesListServiceProtocol {
     // MARK: - Singleton
     static let shared = ImagesListService()
     static let didChangeNotification = Notification.Name("ImagesListServiceDidChange")
@@ -145,12 +145,6 @@ final class ImagesListService {
                         )
                         
                         self.photos = self.photos.withReplaced(itemAt: index, newValue: newPhoto)
-                        
-                        // Отправим уведомление об изменениях
-                        NotificationCenter.default.post(
-                            name: ImagesListService.didChangeNotification,
-                            object: self
-                        )
                     }
                     completion(.success(()))
                 }

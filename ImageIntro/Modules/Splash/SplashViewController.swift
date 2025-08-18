@@ -5,6 +5,7 @@ import ProgressHUD
 // MARK: - Контроллер загрузочного экрана Splash
 final class SplashViewController: UIViewController {
     
+    
     // MARK: - UI
     private let logoImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "splash_screen_logo"))
@@ -12,15 +13,17 @@ final class SplashViewController: UIViewController {
         return imageView
     }()
     
+    
     // MARK: - Сервисы
     private let oauth2Service = OAuth2Service.shared
     private let oauth2TokenStorage = KeychainTokenStorage.shared
     private let profileService = ProfileService.shared
     
+    
     // MARK: - Жизненный цикл
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .ypBlack // если используешь тему
+        view.backgroundColor = .ypBlack
         setupLayout()
     }
     
@@ -41,6 +44,7 @@ final class SplashViewController: UIViewController {
         .lightContent
     }
     
+    
     // MARK: - Верстка
     private func setupLayout() {
         view.addSubview(logoImageView)
@@ -49,6 +53,7 @@ final class SplashViewController: UIViewController {
             logoImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
+    
     
     // MARK: - Навигация
     private func showAuthFlow() {
@@ -75,6 +80,7 @@ final class SplashViewController: UIViewController {
         window.rootViewController = tabBarController
     }
 }
+
 
 // MARK: - Делегат авторизации
 extension SplashViewController: AuthViewControllerDelegate {
@@ -104,10 +110,10 @@ extension SplashViewController: AuthViewControllerDelegate {
     private func fetchProfile(_ token: String) {
         UIBlockingProgressHUD.show()
         profileService.fetchProfile(token) { [weak self] result in
-            UIBlockingProgressHUD.dismiss()
             guard let self = self else { return }
-            
             print("👀 fetchProfile начал работу")
+            
+            UIBlockingProgressHUD.dismiss()
             
             switch result {
             case .success(let profile):
@@ -116,8 +122,24 @@ extension SplashViewController: AuthViewControllerDelegate {
                 self.switchToTabBarController()
                 
             case .failure(let error):
-                print("❌ Ошибка получения профиля: \(error)")
-                // Можно добавить alert здесь
+                switch error {
+                case let networkError as NetworkError:
+                    switch networkError {
+                    case .httpStatusCode(401):
+                        print("🔒 Невалидный токен. Удаляем и запускаем авторизацию.")
+                        oauth2TokenStorage.removeToken()
+                        showAuthFlow()
+                    case .httpStatusCode(403):
+                        print("⛔️ Доступ запрещён (403). Удаляем токен и запускаем авторизацию.")
+                        oauth2TokenStorage.removeToken()
+                        showAuthFlow()
+                    default:
+                        print("🚨 Ошибка сети: \(networkError)")
+                    }
+                default:
+                    print("🚨 Другая ошибка: \(error.localizedDescription)")
+                    
+                }
             }
         }
     }

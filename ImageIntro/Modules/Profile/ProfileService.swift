@@ -9,6 +9,7 @@ final class ProfileService {
     private var lastToken: String?
     private(set) var profile: Profile?
     
+    
     // MARK: - Метод получения профиля пользователя
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         assert(Thread.isMainThread)
@@ -60,6 +61,7 @@ final class ProfileService {
         profile = nil
     }
     
+    
     // MARK: - Вспомогательный метод создания авторизованного GET-запроса
     private func makeRequest(token: String) -> URLRequest? {
         guard let url = URL(string: "https://api.unsplash.com/me") else {
@@ -75,12 +77,17 @@ final class ProfileService {
 }
 
 
+// MARK: - Поддержка протокола ProfileServiceProtocol
+extension ProfileService: ProfileServiceProtocol {}
+
+
 // MARK: - Ошибки ProfileService
 enum ProfileServiceError: Error {
     case invalidRequest
     case requestAlreadyInProgress
     case emptyResponse
 }
+
 
 // MARK: - Структура ответа от сервера Unsplash (для декодирования JSON)
 struct ProfileResult: Decodable {
@@ -96,6 +103,7 @@ struct ProfileResult: Decodable {
         case bio
     }
 }
+
 
 // MARK: - Структура, используемая в UI-слое (профиль пользователя)
 struct Profile {

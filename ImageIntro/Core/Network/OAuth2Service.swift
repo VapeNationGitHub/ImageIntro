@@ -85,9 +85,9 @@ final class OAuth2Service {
         request.httpMethod = HTTPMethod.post.rawValue
         
         let parameters = [
-            "client_id": Constants.AccessKey,
-            "client_secret": Constants.SecretKey,
-            "redirect_uri": Constants.RedirectURI,
+            "client_id": Constants.accessKey,
+            "client_secret": Constants.secretKey,
+            "redirect_uri": Constants.redirectURI,
             "code": code,
             "grant_type": "authorization_code"
         ]
